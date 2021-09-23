@@ -20,14 +20,14 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    //@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private Date dateOfBirth;
+    @Column(name = "acc_enabled")
+    private boolean isAccountEnabled;
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

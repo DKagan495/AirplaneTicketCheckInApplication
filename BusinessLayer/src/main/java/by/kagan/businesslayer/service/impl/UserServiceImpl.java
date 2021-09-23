@@ -9,6 +9,7 @@ import by.kagan.businesslayer.repository.RoleRepository;
 import by.kagan.businesslayer.repository.UserRepository;
 import by.kagan.businesslayer.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +22,7 @@ public class UserServiceImpl implements UserService {
     final UserRepository userRepository;
     final RoleRepository roleRepository;
     final PasswordEncoder encoder;
-
-    @Override
-    public User loadUserByEmailAndPassword(String email, String password) throws UserNotFoundException {
-        if(userRepository.findByEmailAndPassword(email, password).isEmpty()){
-            throw new UserNotFoundException("User with this email and password not exists. Bad credentials.");
-        }
-
-        return userRepository.findByEmailAndPassword(email, password).get();
-    }
+    final AuthenticationProvider provider;
 
     @Override
     public void saveUserDto(UserDto userDto) throws PasswordsNotMatchesException {
@@ -41,9 +34,8 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userDto.getLastName());
         user.setDateOfBirth(userDto.getDateOfBirth());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(encoder.encode(userDto.getPassword()));
         user.setRole(roleRepository.findByRole("ROLE_USER"));
-        System.out.println(user.getRole().getRole());
         userRepository.save(user);
     }
 
@@ -52,6 +44,6 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmailAndPassword(email, password).isEmpty()){
             throw new UserNotFoundException("Bad credentials");
         }
-        return userRepository.findByEmailAndPassword(email, encoder.encode(password)).get();
+        return userRepository.findByEmailAndPassword(email, password).get();
     }
 }

@@ -2,7 +2,6 @@ package by.kagan.businesslayer.config;
 
 import by.kagan.businesslayer.auth.token.jwt.JwtFilter;
 import by.kagan.businesslayer.auth.token.service.AccountAuthorizationService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import springfox.documentation.service.ApiKey;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AccountAuthorizationService authorizationService;
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(authorizationService);
+
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -36,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                //.antMatchers("/test").hasRole("USER")
+                .antMatchers("/test").hasRole("USER")
                 .antMatchers("/login", "/signup", "/swagger-ui.html").permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -58,5 +62,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(authorizationService);
         provider.setPasswordEncoder(encoder());
         return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

@@ -10,7 +10,7 @@ import java.util.Collections;
 
 public class Account implements UserDetails {
 
-    private User user;
+    private final User user;
 
     public Account(User user) {
         this.user = user;
@@ -48,6 +48,6 @@ public class Account implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.isAccountEnabled();
     }
 }
