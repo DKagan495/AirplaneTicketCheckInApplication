@@ -1,10 +1,8 @@
 package by.kagan.businesslayer.auth.token.jwt;
 
 import by.kagan.businesslayer.auth.token.model.Account;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.TextCodec;
+import io.jsonwebtoken.*;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,33 +10,36 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@Log
 public class JwtAuthProvider {
 
     @Value("$(jwt.authkey)")
     private String key;
 
-    public Claims getAllClaims(String token){
-        return Jwts.parser()
+
+
+    public String getUsername(String token){
+        Claims claims = Jwts.parser()
                 .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
+        return claims.getSubject();
     }
 
-    public <T> T getConcreteClaim(String token, Function<Claims, T> claimsTFunction){
-        Claims claims = getAllClaims(token);
-        return claimsTFunction.apply(claims);
-    }
-
-    public String getUsername(String token){
-        return getConcreteClaim(token, Claims::getSubject);
-    }
 
     public boolean isTokenLegacy(String token){
-        Date checkExpDate = getConcreteClaim(token, Claims::getExpiration);
-        return Date.from(Instant.now()).after(checkExpDate);
+        Date today = Date.from(Instant.now());
+        return Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration()
+                .before(today);
     }
 
     public String getToken(String email){
@@ -47,10 +48,24 @@ public class JwtAuthProvider {
         return Jwts.builder()
                 .setSubject(email)
                 .setExpiration(expDate)
-                .signWith(SignatureAlgorithm.HS512, TextCodec.BASE64.decode(key))
+                .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
-    public boolean validateToken(String token, Account account){
-        return !(isTokenLegacy(token)) && account.getUsername().equals(getUsername(token));
+    public boolean validateToken(String token){
+        try {
+            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException expEx) {
+            log.severe("Token expired");
+        } catch (UnsupportedJwtException unsEx) {
+            log.severe("Unsupported jwt");
+        } catch (MalformedJwtException mjEx) {
+            log.severe("Malformed jwt");
+        } catch (SignatureException sEx) {
+            log.severe("Invalid signature");
+        } catch (Exception e) {
+            log.severe("invalid token");
+        }
+        return false;
     }
 }
