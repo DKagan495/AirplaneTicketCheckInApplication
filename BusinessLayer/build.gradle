@@ -32,6 +32,10 @@ dependencies {
     implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
     implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.1.10'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.10'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.5'
+    // https://mvnrepository.com/artifact/commons-net/commons-net
+    implementation group: 'commons-net', name: 'commons-net', version: '3.8.0'
+
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'org.jetbrains:annotations:20.1.0'
     compileOnly 'org.projectlombok:lombok'
