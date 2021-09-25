@@ -45,7 +45,7 @@ public class RegistraionListener implements ApplicationListener<AfterCompleteReg
         confirmationMessage.setFrom("daniil.kahan002@gmail.com");
         confirmationMessage.setTo(recAdress);
         confirmationMessage.setSubject(subject);
-        confirmationMessage.setText("http://localhost:7777/" + confirmUrl);
+        confirmationMessage.setText("http://localhost:7777" + confirmUrl);
         mailSender.send(confirmationMessage);
 
     }

@@ -4,12 +4,11 @@ import by.kagan.businesslayer.auth.token.service.AccountAuthorizationService;
 import by.kagan.businesslayer.domain.Role;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.UserDto;
+import by.kagan.businesslayer.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UserToUserDtoMapper {
-
-
 
     public static UserDto map(User user){
         UserDto resultUserDto = new UserDto();
@@ -31,10 +30,6 @@ public class UserToUserDtoMapper {
         resultUser.setEmail(userDto.getEmail());
         resultUser.setPassword(userDto.getPassword());
         resultUser.setAccountEnabled(userDto.isAccountEnabled());;
-        Role role = new Role();
-        role.setId((long)1);
-        role.setRole("ROLE_USER");
-        resultUser.setRole(role);
         return resultUser;
     }
 }
