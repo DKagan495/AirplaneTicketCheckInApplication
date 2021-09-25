@@ -4,7 +4,6 @@ package by.kagan.businesslayer.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.metamodel.model.domain.internal.AbstractIdentifiableType;
 
 import javax.persistence.*;
 import java.util.Date;

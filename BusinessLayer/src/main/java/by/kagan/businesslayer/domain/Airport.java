@@ -3,10 +3,8 @@ package by.kagan.businesslayer.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.Set;
 
 @Getter

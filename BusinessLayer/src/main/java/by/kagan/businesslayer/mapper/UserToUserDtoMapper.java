@@ -1,10 +1,7 @@
 package by.kagan.businesslayer.mapper;
 
-import by.kagan.businesslayer.auth.token.service.AccountAuthorizationService;
-import by.kagan.businesslayer.domain.Role;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.UserDto;
-import by.kagan.businesslayer.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -19,6 +16,7 @@ public class UserToUserDtoMapper {
         resultUserDto.setPassword(user.getPassword());
         resultUserDto.setConfirmPassword(user.getPassword());
         resultUserDto.setAccountEnabled(user.isAccountEnabled());
+        resultUserDto.setRole(user.getRole());
         return resultUserDto;
     }
 
@@ -29,7 +27,8 @@ public class UserToUserDtoMapper {
         resultUser.setDateOfBirth(userDto.getDateOfBirth());
         resultUser.setEmail(userDto.getEmail());
         resultUser.setPassword(userDto.getPassword());
-        resultUser.setAccountEnabled(userDto.isAccountEnabled());;
+        resultUser.setAccountEnabled(userDto.isAccountEnabled());
+        resultUser.setRole(userDto.getRole());
         return resultUser;
     }
 }
