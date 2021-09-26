@@ -77,9 +77,8 @@ public class AuthController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    //ебануть просрочку
     @GetMapping(value = "/signupconfirmation", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> confirmAccount(@RequestParam("token") String token, WebRequest request){
+    public ResponseEntity<HttpStatus> confirmAccount(@RequestParam("token") String token){
         VerificationToken verificationToken;
         try{
            verificationToken = userService.loadVerificationToken(token);
