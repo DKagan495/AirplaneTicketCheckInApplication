@@ -1,11 +1,10 @@
 package by.kagan.businesslayer.service.impl;
 
 import by.kagan.businesslayer.auth.token.verification.VerificationToken;
-import by.kagan.businesslayer.domain.Role;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.UserDto;
 import by.kagan.businesslayer.exception.PasswordsNotMatchesException;
-import by.kagan.businesslayer.exception.UserNotFoundException;
+import by.kagan.businesslayer.exception.VerificationTokenExpiredException;
 import by.kagan.businesslayer.exception.VerificationTokenNotFoundException;
 import by.kagan.businesslayer.repository.RoleRepository;
 import by.kagan.businesslayer.repository.TokenRepository;
@@ -17,7 +16,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import static by.kagan.businesslayer.mapper.UserToUserDtoMapper.*;
+
+import java.time.Instant;
+import java.util.Date;
+import java.util.Optional;
+
+import static by.kagan.businesslayer.mapper.UserToUserDtoMapper.unMap;
 
 @Service
 @RequiredArgsConstructor
@@ -43,19 +47,22 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
+    @Override
     public void createVerificationToken(User user, String token){
-        System.out.println("Зашли в метод");
         VerificationToken verificationToken = new VerificationToken(user, token);
         tokenRepository.save(verificationToken);
     }
 
     @Override
-    public VerificationToken loadVerificationToken(String token) throws VerificationTokenNotFoundException {
-        if(tokenRepository.findByToken(token).isEmpty()){
+    public VerificationToken loadVerificationToken(String token) throws VerificationTokenNotFoundException, VerificationTokenExpiredException {
+        Optional<VerificationToken> hypoteseToken = tokenRepository.findByToken(token);
+        if(hypoteseToken.isEmpty()){
             throw new VerificationTokenNotFoundException("Verification token not found");
         }
-       return tokenRepository.findByToken(token).get();
+        if(hypoteseToken.get().getExpiryDate().before(Date.from(Instant.now()))){
+            throw new VerificationTokenExpiredException("Verification token is expired");
+        }
+       return hypoteseToken.get();
     }
 
     @Override

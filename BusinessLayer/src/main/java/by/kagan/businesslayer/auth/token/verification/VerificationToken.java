@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,7 +19,8 @@ import java.util.Date;
 @Table(name = "verification_tokens")
 public class VerificationToken {
 
-    private final static int EXPIRATION_TIME_IN_MINUTES = 60*24;
+    @Transient
+    private final int EXPIRATION_TIME_IN_MINUTES = 60*24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

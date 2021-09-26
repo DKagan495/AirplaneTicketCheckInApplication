@@ -10,6 +10,7 @@ import by.kagan.businesslayer.dto.AuthRequestTransferObject;
 import by.kagan.businesslayer.dto.UserDto;
 import by.kagan.businesslayer.exception.PasswordsNotMatchesException;
 import by.kagan.businesslayer.exception.UserNotFoundException;
+import by.kagan.businesslayer.exception.VerificationTokenExpiredException;
 import by.kagan.businesslayer.exception.VerificationTokenNotFoundException;
 import by.kagan.businesslayer.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
@@ -76,13 +77,13 @@ public class AuthController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    //fix problem with roles
+    //ебануть просрочку
     @GetMapping(value = "/signupconfirmation", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> confirmAccount(@RequestParam("token") String token, WebRequest request){
         VerificationToken verificationToken;
         try{
            verificationToken = userService.loadVerificationToken(token);
-        } catch (VerificationTokenNotFoundException exception) {
+        } catch (VerificationTokenNotFoundException | VerificationTokenExpiredException exception) {
             exception.printStackTrace();
             return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
         }
