@@ -40,6 +40,7 @@ public class VerificationToken {
         return new Date(calendar.getTime().getTime());
     }
 
+//    TODO: зачем явный вызов super?
     public VerificationToken (User user, String token){
         super();
 

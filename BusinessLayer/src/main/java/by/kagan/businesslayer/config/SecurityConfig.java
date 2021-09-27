@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+//    TODO: инжект через поле нежелателен.
     @Autowired
     private JwtFilter jwtFilter;
 
@@ -42,9 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+//                TODO: избегать использования литералов. Возможное исключение -  url'ы. Зачем здесь antMatchers  в таком виде?
                 .antMatchers("/test").hasRole("USER")
                 .antMatchers("/login", "/signup", "/swagger-ui.html", "/signupconfirmation").permitAll()
                 .and()
+//                TODO: есть ли необходимость addFilterBefore?
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
+//TODO: чтобы постгрес позволил создать таблицу user - ее следует назвать "user". В данном случае: @Table(name = "\"user\"")
 @Table(name = "users")
 public class User {
     @Id
@@ -24,6 +25,7 @@ public class User {
     private String email;
     private String password;
     private Date dateOfBirth;
+//    TODO: пустые строки между полями в целом, особенно - когда над след полем используются аннотации
     @Column(name = "acc_enabled")
     private boolean isAccountEnabled;
     @ManyToOne

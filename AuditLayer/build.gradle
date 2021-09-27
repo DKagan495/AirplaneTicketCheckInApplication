@@ -3,7 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
-
+//TODO: базовые пакеты включают название проекта и/или сервиса напр.: by.kagan.ticket.audit || by.kagan.audit
 group = 'by.kagan'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'

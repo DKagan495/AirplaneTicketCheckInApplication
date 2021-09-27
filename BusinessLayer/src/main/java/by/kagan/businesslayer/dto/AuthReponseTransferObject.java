@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+//TODO: более общий идентификатор класса - в конец. Напр.:AuthTransferObjectResponse
 public class AuthReponseTransferObject {
     private String token;
 }

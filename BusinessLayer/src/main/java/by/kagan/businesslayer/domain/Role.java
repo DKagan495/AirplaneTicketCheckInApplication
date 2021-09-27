@@ -12,6 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
+//TODO: позволяет создание новых ролей через БД. Если нет пермишнов и дискретной ролевой модели - ситуация неконтролируема и необрабатываема
+//TODO: не рекомендую использование GrantedAuthority в контексте доменного объекта
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,6 +11,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
+//TODO: название таблицы - в ед.ч.
 @Table(name = "airports")
 public class Airport {
     @Id
@@ -19,6 +20,7 @@ public class Airport {
 
     private String name;
 
+//    TODO: Почему set?
     @OneToMany(mappedBy = "airportFrom")
     private Set<Flight> flightsFrom;
 

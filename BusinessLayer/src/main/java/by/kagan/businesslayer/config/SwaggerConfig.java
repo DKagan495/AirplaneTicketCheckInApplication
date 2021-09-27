@@ -42,6 +42,7 @@ public class SwaggerConfig {
                 .build();
     }
 
+//    TODO: мб лучше ApiInfoBuilder? Часть полей де-факто юзлесс
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "My REST API",

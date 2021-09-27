@@ -33,8 +33,9 @@ import static by.kagan.businesslayer.mapper.UserToUserDtoMapper.map;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "Auth")
+//TODO: базовый url-префикс контроллера?
 public class AuthController {
-
+//    TODO: модификаторы доступа?
     final AccountAuthorizationService authorizationService;
 
     final UserServiceImpl userService;
@@ -52,8 +53,13 @@ public class AuthController {
         return authorizationService.loadUserByUsername(principal.getName()).toString();
     }
 
+//    TODO: consumes = MediaType.APPLICATION_JSON_VALUE - зачем?
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    //    TODO: authRequestDto -> authRequest || request. Зачем throws?
+    //    TODO: валидировать входные данные через javax.validation
     public ResponseEntity<AuthReponseTransferObject> tryToAuthUser(@RequestBody AuthRequestTransferObject authRequestDto) throws UserNotFoundException {
+//        TODO: сервисная логика в контроллере. В общем случае контроллер должен выглядеть как return ResponseEntity.ok(sthService.sthMethod());
+//         исключения  - валидация(нежелательно)/конвертация входных данных или конвертация данных респонса
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword()));
         } catch (BadCredentialsException exception) {
@@ -65,6 +71,7 @@ public class AuthController {
 
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> registerUser(@RequestBody UserDto userDto, final HttpServletRequest request) {
+        //        TODO: сервисная логика в контроллере.
         try{
             User user = userService.saveUserDto(userDto);
             user.setId(userService.loadUserByEmail(user.getEmail()).getId());
@@ -72,12 +79,16 @@ public class AuthController {
             eventPublisher.publishEvent(new AfterCompleteRegistrationEvent(user, request.getLocale(), appUrl));
         } catch (PasswordsNotMatchesException exception) {
             exception.printStackTrace();
+//            TODO: return ResponseEntity.badRequest()
             return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
         }
+//        TODO: ResponseEntity.ok(); || ResponseEntity.status(HttpStatus.OK);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+//    TODO: нечитаемый урл запроса
     @GetMapping(value = "/signupconfirmation", produces = MediaType.APPLICATION_JSON_VALUE)
+//    TODO: зачем атрибут в RequestParam?
     public ResponseEntity<HttpStatus> confirmAccount(@RequestParam("token") String token){
         VerificationToken verificationToken;
         try{
