@@ -7,89 +7,87 @@ import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistr
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.AuthReponseTransferObject;
 import by.kagan.businesslayer.dto.AuthRequestTransferObject;
-import by.kagan.businesslayer.dto.UserDto;
+import by.kagan.businesslayer.dto.UserRequest;
 import by.kagan.businesslayer.exception.PasswordsNotMatchesException;
-import by.kagan.businesslayer.exception.UserNotFoundException;
 import by.kagan.businesslayer.exception.VerificationTokenExpiredException;
-import by.kagan.businesslayer.exception.VerificationTokenNotFoundException;
-import by.kagan.businesslayer.service.impl.UserServiceImpl;
+import by.kagan.businesslayer.mapper.UserToUserDtoMapper;
+import by.kagan.businesslayer.service.AuthService;
+import by.kagan.businesslayer.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-
-import static by.kagan.businesslayer.mapper.UserToUserDtoMapper.map;
+import javax.validation.Valid;
+import javax.validation.ValidationException;
+import java.time.Instant;
+import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/api")
 @Api(tags = "Auth")
 public class AuthController {
 
-    final AccountAuthorizationService authorizationService;
+    private final AccountAuthorizationService authorizationService;
 
-    final UserServiceImpl userService;
+    private final AuthService authService;
 
-    final JwtAuthProvider authProvider;
+    private final UserService userService;
 
-    final AuthenticationManager authenticationManager;
+    private final JwtAuthProvider authProvider;
 
-    final ApplicationEventPublisher eventPublisher;
+    private final AuthenticationManager authenticationManager;
+
+    private final ApplicationEventPublisher eventPublisher;
 
 
-    @GetMapping(value = "/test")
-    public String hello(Principal principal){
-        System.out.println(principal.getName());
-        return authorizationService.loadUserByUsername(principal.getName()).toString();
-    }
 
-    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthReponseTransferObject> tryToAuthUser(@RequestBody AuthRequestTransferObject authRequestDto) throws UserNotFoundException {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword()));
-        } catch (BadCredentialsException exception) {
-            exception.printStackTrace();
-        }
+    @PostMapping(value = "/login")
+    public ResponseEntity<AuthReponseTransferObject> tryToAuthUser(@RequestBody AuthRequestTransferObject authRequestDto) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(),
+                authRequestDto.getPassword()));
+
         String token = authProvider.getToken(authRequestDto.getEmail());
         return ResponseEntity.ok(new AuthReponseTransferObject(token));
     }
 
-    @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> registerUser(@RequestBody UserDto userDto, final HttpServletRequest request) {
-        try{
-            User user = userService.saveUserDto(userDto);
-            user.setId(userService.loadUserByEmail(user.getEmail()).getId());
+    @PostMapping(value = "/signup")
+    public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody UserRequest entityUserRequest, BindingResult bindingResult, final HttpServletRequest request){
+        System.out.println("Before errors checking");
+        if(bindingResult.hasErrors() || bindingResult.hasFieldErrors()){
+            throw new ValidationException(bindingResult.getAllErrors().toString());
+        }
+            User user = UserToUserDtoMapper.unMap(entityUserRequest);
+            userService.create(user);
+            user.setId(userService.getUserByEmail(user.getEmail()).getId());
             String appUrl = request.getContextPath();
             eventPublisher.publishEvent(new AfterCompleteRegistrationEvent(user, request.getLocale(), appUrl));
-        } catch (PasswordsNotMatchesException exception) {
-            exception.printStackTrace();
-            return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
-        }
+
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/signupconfirmation", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> confirmAccount(@RequestParam("token") String token){
-        VerificationToken verificationToken;
-        try{
-           verificationToken = userService.loadVerificationToken(token);
-        } catch (VerificationTokenNotFoundException | VerificationTokenExpiredException exception) {
-            exception.printStackTrace();
-            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+
+    @GetMapping(value = "/signupconfirmation")
+    public ResponseEntity<HttpStatus> confirmAccount(@RequestParam String token){
+        VerificationToken verificationToken = authService.loadVerificationToken(token);
+
+        if(verificationToken.getExpiryDate().before(Date.from(Instant.now()))){
+            throw new VerificationTokenExpiredException();
         }
+
         User user = verificationToken.getUser();
         user.setAccountEnabled(true);
-        UserDto toUpdateEnabledStatusUserDto = map(user);
-        userService.updateUser(user.getId(), toUpdateEnabledStatusUserDto);
+
+        userService.updateUser(user);
+
         return ResponseEntity.accepted().body(HttpStatus.ACCEPTED);
     }
 }

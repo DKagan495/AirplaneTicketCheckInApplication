@@ -2,7 +2,7 @@ package by.kagan.businesslayer.auth.token.verification.listener;
 
 import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistrationEvent;
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.service.UserService;
+import by.kagan.businesslayer.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class RegistraionListener implements ApplicationListener<AfterCompleteRegistrationEvent> {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -30,16 +30,20 @@ public class RegistraionListener implements ApplicationListener<AfterCompleteReg
 
     private void confirmRegistration(AfterCompleteRegistrationEvent event){
         User user = event.getUser();
+
         String token = UUID.randomUUID().toString();
-        userService.createVerificationToken(user, token);
+        authService.createVerificationToken(user, token);
+
         String recAdress = user.getEmail();
         String subject = "Confirm Registration";
         String confirmUrl = event.getAppUrl() + "/signupconfirmation?token=" + token;
+
         SimpleMailMessage confirmationMessage = new SimpleMailMessage();
         confirmationMessage.setFrom("daniil.kahan002@gmail.com");
         confirmationMessage.setTo(recAdress);
         confirmationMessage.setSubject(subject);
         confirmationMessage.setText("http://localhost:7777" + confirmUrl);
+
         mailSender.send(confirmationMessage);
 
     }

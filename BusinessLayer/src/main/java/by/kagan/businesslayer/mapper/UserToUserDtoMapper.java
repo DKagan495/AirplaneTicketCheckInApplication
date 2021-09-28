@@ -1,34 +1,32 @@
 package by.kagan.businesslayer.mapper;
 
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.dto.UserDto;
+import by.kagan.businesslayer.dto.UserRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UserToUserDtoMapper {
 
-    public static UserDto map(User user){
-        UserDto resultUserDto = new UserDto();
-        resultUserDto.setFirstName(user.getFirstName());
-        resultUserDto.setLastName(user.getLastName());
-        resultUserDto.setDateOfBirth(user.getDateOfBirth());
-        resultUserDto.setEmail(user.getEmail());
-        resultUserDto.setPassword(user.getPassword());
-        resultUserDto.setConfirmPassword(user.getPassword());
-        resultUserDto.setAccountEnabled(user.isAccountEnabled());
-        resultUserDto.setRole(user.getRole());
-        return resultUserDto;
+    public static UserRequest map(User user){
+        UserRequest resultEntityUserRequest = new UserRequest();
+        resultEntityUserRequest.setFirstName(user.getFirstName());
+        resultEntityUserRequest.setLastName(user.getLastName());
+        resultEntityUserRequest.setDateOfBirth(user.getDateOfBirth());
+        resultEntityUserRequest.setEmail(user.getEmail());
+        resultEntityUserRequest.setPassword(user.getPassword());
+        resultEntityUserRequest.setConfirmPassword(user.getPassword());
+        resultEntityUserRequest.setAccountEnabled(user.isAccountEnabled());
+        return resultEntityUserRequest;
     }
 
-    public static User unMap(UserDto userDto){
+    public static User unMap(UserRequest entityUserRequest){
         User resultUser = new User();
-        resultUser.setFirstName(userDto.getFirstName());
-        resultUser.setLastName(userDto.getLastName());
-        resultUser.setDateOfBirth(userDto.getDateOfBirth());
-        resultUser.setEmail(userDto.getEmail());
-        resultUser.setPassword(userDto.getPassword());
-        resultUser.setAccountEnabled(userDto.isAccountEnabled());
-        resultUser.setRole(userDto.getRole());
+        resultUser.setFirstName(entityUserRequest.getFirstName());
+        resultUser.setLastName(entityUserRequest.getLastName());
+        resultUser.setDateOfBirth(entityUserRequest.getDateOfBirth());
+        resultUser.setEmail(entityUserRequest.getEmail());
+        resultUser.setPassword(entityUserRequest.getPassword());
+        resultUser.setAccountEnabled(entityUserRequest.isAccountEnabled());
         return resultUser;
     }
 }

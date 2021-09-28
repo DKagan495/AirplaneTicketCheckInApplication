@@ -1,11 +1,14 @@
 package by.kagan.businesslayer.domain;
 
+import by.kagan.businesslayer.auth.enumeration.Role;
+import by.kagan.businesslayer.validator.annotaion.Match;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -19,16 +22,24 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private String password;
+
     private Date dateOfBirth;
+
     @Column(name = "acc_enabled")
     private boolean isAccountEnabled;
-    @ManyToOne
-    @JoinColumn(name = "role_id")
+
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
-    private Set<Ticket> tickets;;
+    private Set<Ticket> tickets;
 }
