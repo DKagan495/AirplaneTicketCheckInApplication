@@ -19,6 +19,7 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    TODO: есть ли необходимость двусторонней связи? Должна ли быть eager? Рекомендую хранить id отдельным полем
     @ManyToOne
     @JoinColumn(name = "airport_from_id")
     private Airport airportFrom;

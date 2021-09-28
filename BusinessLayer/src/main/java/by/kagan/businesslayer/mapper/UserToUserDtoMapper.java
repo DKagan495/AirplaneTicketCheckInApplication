@@ -6,6 +6,7 @@ import by.kagan.businesslayer.dto.UserEntityObjectResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+// TODO: использовать MapStruct. Осмысленное название методов
 public class UserToUserDtoMapper {
 
     public static UserEntityObjectResponse mapToResponse(User user){

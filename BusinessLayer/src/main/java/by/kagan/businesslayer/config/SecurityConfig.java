@@ -28,7 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String USER_ENDPOINTS = "/api/user/**";
     private static final String ADMIN_ENDPOINTS = "/api/admin/**";
 
+<<<<<<< HEAD
     private final JwtFilter jwtFilter;
+=======
+//    TODO: инжект через поле нежелателен.
+    @Autowired
+    private JwtFilter jwtFilter;
+>>>>>>> db5e34a213d4d01fb0dfa01266314437ff3d106c
 
     private final AccountAuthorizationService authorizationService;
 
@@ -46,10 +52,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+<<<<<<< HEAD
                 .antMatchers(USER_ENDPOINTS).authenticated()
                 .antMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
                 .antMatchers(FREE_ENDPOINTS_SIGN_UP, FREE_ENDPOINTS_AUTH).permitAll()
+=======
+//                TODO: избегать использования литералов. Возможное исключение -  url'ы. Зачем здесь antMatchers  в таком виде?
+                .antMatchers("/test").hasRole("USER")
+                .antMatchers("/login", "/signup", "/swagger-ui.html", "/signupconfirmation").permitAll()
+>>>>>>> db5e34a213d4d01fb0dfa01266314437ff3d106c
                 .and()
+//                TODO: есть ли необходимость addFilterBefore?
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
