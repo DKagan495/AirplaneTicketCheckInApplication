@@ -29,8 +29,6 @@ public class UserController {
 
     @GetMapping
     public List<UserEntityObjectResponse> getAllUsers(){
-        List<UserEntityObjectResponse> response = new ArrayList<>();
-
         return userService.loadAllUsers().stream().collect(ArrayList::new, (list, user)->list.add(UserToUserDtoMapper.mapToResponse(user)), ArrayList::addAll);
     }
 
