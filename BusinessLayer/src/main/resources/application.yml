@@ -1,0 +1,24 @@
+server:
+    port: 7777
+spring:
+    datasource:
+      username: daniel
+      password: 16052002
+      url: jdbc:postgresql://localhost:5432/ticketbase
+      driver-class-name: org.postgresql.Driver
+    flyway:
+      url: jdbc:postgresql://localhost:5432/ticketbase
+      user: daniel
+      password: 16052002
+      driver-class-name: org.postgresql.Driver
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: daniil.kahan002@gmail.com
+      password: qzsyhzypiczaskjd
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+                  enable: true
