@@ -8,37 +8,40 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Match(field = "password", fieldMatch = "confirmPassword", message = "Password not matches with confirmation")
-public class UserRequest {
+public class UserEntityObjectRequest {
 
-    @NotEmpty(message = "Field firstName cannot be empty")
+    @NotBlank(message = "Field firstName cannot be empty")
+    @NotNull(message = "Field firstName is null")
     @Size(min = 2, max = 21, message = "Length of the firstName cannot be <2 & >21")
     private String firstName;
 
-    @NotEmpty(message = "Field lastName cannot be empty")
+    @NotBlank(message = "Field lastName cannot be empty")
+    @NotNull(message = "Field lastName is null")
     @Size(min = 2, max = 21, message = "Length of the lastName cannot be <2 & >21")
     private String lastName;
 
     private Date dateOfBirth;
 
-    @NotEmpty(message = "Field email cannot be empty")
+    @NotBlank(message = "Field email cannot be empty")
+    @NotNull(message = "Field email is null")
     @Email(message = "Email should be email")
     private String email;
 
-    @NotEmpty(message = "Field password cannot be empty")
+    @NotBlank(message = "Field password cannot be empty")
+    @NotNull(message = "Field password is null")
     @Size(min = 8, message = "Password cannot be less than 8 symbols")
     private String password;
 
     @JsonProperty("confirmPassword")
-    @NotEmpty(message = "Field confirmPassword cannot be empty")
+    @NotBlank(message = "Field confirmPassword cannot be empty")
+    @NotNull(message = "confirm password is null")
     private String confirmPassword;
 
     @JsonIgnore

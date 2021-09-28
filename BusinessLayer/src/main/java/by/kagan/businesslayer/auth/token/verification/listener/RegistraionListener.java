@@ -36,13 +36,13 @@ public class RegistraionListener implements ApplicationListener<AfterCompleteReg
 
         String recAdress = user.getEmail();
         String subject = "Confirm Registration";
-        String confirmUrl = event.getAppUrl() + "/signupconfirmation?token=" + token;
+        String confirmUrl = event.getAppUrl() + "/api/signup/verify?token=" + token;
 
         SimpleMailMessage confirmationMessage = new SimpleMailMessage();
         confirmationMessage.setFrom("daniil.kahan002@gmail.com");
         confirmationMessage.setTo(recAdress);
         confirmationMessage.setSubject(subject);
-        confirmationMessage.setText("http://localhost:7777" + confirmUrl);
+        confirmationMessage.setText("Hello, " + user.getFirstName() + " " + user.getLastName() + "!\nIf you want to activate your account, you should use link below.\n" + "http://localhost:7777" + confirmUrl);
 
         mailSender.send(confirmationMessage);
 

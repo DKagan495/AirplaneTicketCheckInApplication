@@ -1,7 +1,9 @@
 package by.kagan.businesslayer.controller;
 
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.exception.UserNotFoundException;
+import by.kagan.businesslayer.dto.UserEntityObjectResponse;
+
+import by.kagan.businesslayer.mapper.UserToUserDtoMapper;
 import by.kagan.businesslayer.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -13,34 +15,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Api("UserApi")
+@Api(tags = "Information about users")
 @RequestMapping(value = "/api/user/users")
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping
-    public Collection<User> getAllUsers(){
-        return userService.loadAllUsers();
+    public List<UserEntityObjectResponse> getAllUsers(){
+        List<UserEntityObjectResponse> response = new ArrayList<>();
+
+        return userService.loadAllUsers().stream().collect(ArrayList::new, (list, user)->list.add(UserToUserDtoMapper.mapToResponse(user)), ArrayList::addAll);
     }
 
-    @GetMapping("/users/id")
+    @GetMapping("/id")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
-        try{
             return ResponseEntity.ok(userService.loadUserById(id));
-        } catch (UserNotFoundException exception) {
-            exception.printStackTrace();
-        }
-        return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/users/current")
-    public User getPrincipal(Principal principal){
-        return userService.getUserByEmail(principal.getName());
+    @GetMapping("/current")
+    public UserEntityObjectResponse getPrincipal(Principal principal){
+        return UserToUserDtoMapper.mapToResponse(userService.getUserByEmail(principal.getName()));
     }
 
 

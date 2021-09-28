@@ -14,7 +14,7 @@ import java.util.Date;
 @Component
 public class JwtAuthProvider {
 
-    private static final String KEY = Arrays.toString(RandomStringUtils.random(21, true, true).getBytes(StandardCharsets.UTF_8));
+    private static final String KEY = "sometimes";
 
     public String getUsername(String token){
         Claims claims = Jwts.parser()

@@ -3,11 +3,13 @@ package by.kagan.businesslayer.controller;
 import by.kagan.businesslayer.auth.token.verification.VerificationToken;
 import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistrationEvent;
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.dto.UserRequest;
+import by.kagan.businesslayer.dto.UserEntityObjectRequest;
 import by.kagan.businesslayer.exception.VerificationTokenExpiredException;
+import by.kagan.businesslayer.mapper.RequestToUserMapper;
 import by.kagan.businesslayer.mapper.UserToUserDtoMapper;
 import by.kagan.businesslayer.service.AuthService;
 import by.kagan.businesslayer.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import java.util.Date;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/signup")
+@Api(tags = "Sign Up and Account Verifying")
 public class RegistrationController {
 
     private final AuthService authService;
@@ -34,11 +37,11 @@ public class RegistrationController {
 
 
     @PostMapping
-    public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody UserRequest entityUserRequest, BindingResult bindingResult, final HttpServletRequest request){
+    public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody UserEntityObjectRequest entityUserEntityObjectRequest, BindingResult bindingResult, final HttpServletRequest request){
         if(bindingResult.hasErrors() || bindingResult.hasFieldErrors()){
             throw new ValidationException(bindingResult.getAllErrors().toString());
         }
-        User user = UserToUserDtoMapper.unMap(entityUserRequest);
+        User user = RequestToUserMapper.map(entityUserEntityObjectRequest);
         userService.create(user);
         user.setId(userService.getUserByEmail(user.getEmail()).getId());
         String appUrl = request.getContextPath();
