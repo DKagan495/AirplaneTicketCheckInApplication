@@ -32,25 +32,16 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/auth")
 @Api(tags = "Auth")
 public class AuthController {
-
-    private final AccountAuthorizationService authorizationService;
-
-    private final AuthService authService;
-
-    private final UserService userService;
 
     private final JwtAuthProvider authProvider;
 
     private final AuthenticationManager authenticationManager;
 
-    private final ApplicationEventPublisher eventPublisher;
 
-
-
-    @PostMapping(value = "/login")
+    @PostMapping
     public ResponseEntity<AuthReponseTransferObject> tryToAuthUser(@RequestBody AuthRequestTransferObject authRequestDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(),
                 authRequestDto.getPassword()));
@@ -59,35 +50,5 @@ public class AuthController {
         return ResponseEntity.ok(new AuthReponseTransferObject(token));
     }
 
-    @PostMapping(value = "/signup")
-    public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody UserRequest entityUserRequest, BindingResult bindingResult, final HttpServletRequest request){
-        System.out.println("Before errors checking");
-        if(bindingResult.hasErrors() || bindingResult.hasFieldErrors()){
-            throw new ValidationException(bindingResult.getAllErrors().toString());
-        }
-            User user = UserToUserDtoMapper.unMap(entityUserRequest);
-            userService.create(user);
-            user.setId(userService.getUserByEmail(user.getEmail()).getId());
-            String appUrl = request.getContextPath();
-            eventPublisher.publishEvent(new AfterCompleteRegistrationEvent(user, request.getLocale(), appUrl));
 
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-
-    @GetMapping(value = "/signupconfirmation")
-    public ResponseEntity<HttpStatus> confirmAccount(@RequestParam String token){
-        VerificationToken verificationToken = authService.loadVerificationToken(token);
-
-        if(verificationToken.getExpiryDate().before(Date.from(Instant.now()))){
-            throw new VerificationTokenExpiredException();
-        }
-
-        User user = verificationToken.getUser();
-        user.setAccountEnabled(true);
-
-        userService.updateUser(user);
-
-        return ResponseEntity.accepted().body(HttpStatus.ACCEPTED);
-    }
 }

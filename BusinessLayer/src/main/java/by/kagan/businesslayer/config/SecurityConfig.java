@@ -23,6 +23,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final String FREE_ENDPOINTS_AUTH = "/api/auth/**";
+    private static final String FREE_ENDPOINTS_SIGN_UP = "/api/signup/**";
+    private static final String USER_ENDPOINTS = "/api/user/**";
+    private static final String ADMIN_ENDPOINTS = "/api/admin/**";
 
     private final JwtFilter jwtFilter;
 
@@ -42,9 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login", "/signup", "/swagger-ui.html", "/signupconfirmation").permitAll()
+                .antMatchers(USER_ENDPOINTS).hasRole("USER")
+                .antMatchers(USER_ENDPOINTS, ADMIN_ENDPOINTS).hasRole("ADMIN")
+                .antMatchers(FREE_ENDPOINTS_SIGN_UP, FREE_ENDPOINTS_AUTH).permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
