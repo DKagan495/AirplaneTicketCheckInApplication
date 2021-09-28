@@ -1,6 +1,6 @@
 package by.kagan.businesslayer.dto;
 
-import by.kagan.businesslayer.domain.Role;
+import by.kagan.businesslayer.auth.enumeration.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +16,7 @@ public class UserDto {
     private String email;
     private String password;
     private String confirmPassword;
+    @JsonIgnore
     private boolean isAccountEnabled;
     @JsonIgnore
     private Role role;
