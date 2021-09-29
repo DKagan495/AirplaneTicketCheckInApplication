@@ -16,7 +16,6 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "verification_tokens")
 public class VerificationToken {
 
     @Transient

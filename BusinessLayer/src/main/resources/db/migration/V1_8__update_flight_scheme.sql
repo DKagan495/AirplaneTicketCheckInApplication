@@ -1,0 +1,1 @@
+alter table flight add column ticketsLeft int not null default 0;

@@ -11,8 +11,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-//TODO: название таблицы - в ед.ч.
-@Table(name = "airports")
 public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

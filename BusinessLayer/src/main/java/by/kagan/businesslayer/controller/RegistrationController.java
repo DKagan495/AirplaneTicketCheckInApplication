@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +37,15 @@ public class RegistrationController {
     private final ApplicationEventPublisher eventPublisher;
 
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody UserEntityObjectRequest entityUserEntityObjectRequest, BindingResult bindingResult, final HttpServletRequest request){
         if(bindingResult.hasErrors() || bindingResult.hasFieldErrors()){
-            throw new ValidationException(bindingResult.getAllErrors().toString());
+            bindingResult.getAllErrors().forEach(System.out::println);
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
         }
+
         User user = RequestToUserMapper.map(entityUserEntityObjectRequest);
         userService.create(user);
-        user.setId(userService.getUserByEmail(user.getEmail()).getId());
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new AfterCompleteRegistrationEvent(user, request.getLocale(), appUrl));
 

@@ -13,18 +13,17 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "flights")
 public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 //    TODO: есть ли необходимость двусторонней связи? Должна ли быть eager? Рекомендую хранить id отдельным полем
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airport_from_id")
     private Airport airportFrom;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airport_to_id")
     private Airport airportTo;
 
@@ -33,4 +32,6 @@ public class Flight {
 
     @Column(name = "fight_date")
     private Date date;
+
+    private int ticketsLeft;
 }

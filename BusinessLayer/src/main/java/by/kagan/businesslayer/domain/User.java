@@ -1,7 +1,6 @@
 package by.kagan.businesslayer.domain;
 
 import by.kagan.businesslayer.auth.enumeration.Role;
-import by.kagan.businesslayer.validator.annotaion.Match;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "\"user\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
