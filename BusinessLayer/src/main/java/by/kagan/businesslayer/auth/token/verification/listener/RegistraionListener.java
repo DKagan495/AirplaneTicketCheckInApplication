@@ -22,7 +22,7 @@ public class RegistraionListener implements ApplicationListener<AfterCompleteReg
     @Autowired
     private JavaMailSender mailSender;
 
-
+//TODO: зачем?
     @Override
     public void onApplicationEvent(AfterCompleteRegistrationEvent event) {
         this.confirmRegistration(event);

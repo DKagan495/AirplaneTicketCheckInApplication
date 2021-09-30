@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+//TODO: упростить название классов-dto
 public class AuthTransferObjectRequest {
     private String email;
     private String password;

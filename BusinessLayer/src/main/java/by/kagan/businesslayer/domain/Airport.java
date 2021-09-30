@@ -19,6 +19,7 @@ public class Airport {
     private String name;
 
 //    TODO: Почему set?
+//    TODO: Почему set?(х2)
     @OneToMany(mappedBy = "airportFrom")
     private Set<Flight> flightsFrom;
 
