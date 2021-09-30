@@ -15,6 +15,7 @@ public class AfterCompleteRegistrationEvent extends ApplicationEvent {
     private Locale locale;
     private User user;
 
+//    TODO: зачем?
     public AfterCompleteRegistrationEvent(User user, Locale locale, String appUrl) {
         super(user);
         this.user = user;

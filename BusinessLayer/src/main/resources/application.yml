@@ -1,5 +1,6 @@
 server:
     port: 7777
+#    TODO: пробелы между верхнеуровневыми тегами
 spring:
     datasource:
       username: daniel

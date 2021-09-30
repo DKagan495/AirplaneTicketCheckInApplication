@@ -36,7 +36,7 @@ public class RegistrationController {
 
     private final ApplicationEventPublisher eventPublisher;
 
-
+//TODO: валидации добавлять через @InitBinder, если необходимо. Не использовать классы валидаторов в методах-эндпоинтах
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody UserEntityObjectRequest entityUserEntityObjectRequest, BindingResult bindingResult, final HttpServletRequest request){
         if(bindingResult.hasErrors() || bindingResult.hasFieldErrors()){

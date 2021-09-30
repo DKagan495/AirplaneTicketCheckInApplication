@@ -32,6 +32,7 @@ public class UserController {
         return userService.loadAllUsers().stream().collect(ArrayList::new, (list, user)->list.add(UserToUserDtoMapper.mapToResponse(user)), ArrayList::addAll);
     }
 
+//    /{id} для PathVariable
     @GetMapping("/id")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
             return ResponseEntity.ok(userService.loadUserById(id));

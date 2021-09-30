@@ -32,6 +32,7 @@ public class User {
 
     private Date dateOfBirth;
 
+//    TODO: достаточно просто enabled
     @Column(name = "acc_enabled")
     private boolean isAccountEnabled;
 

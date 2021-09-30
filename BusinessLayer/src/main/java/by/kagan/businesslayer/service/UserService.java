@@ -15,6 +15,7 @@ import java.util.List;
 
 
 @Service
+//TODO: transactional only for write-methods
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
@@ -24,7 +25,6 @@ public class UserService {
     private final PasswordEncoder encoder;
 
     public User create(User user) throws PasswordsNotMatchesException {
-
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER);
         user.setAccountEnabled(false);
@@ -42,7 +42,6 @@ public class UserService {
     public List<User> loadAllUsers() {
         return userRepository.findAll();
     }
-
 
     public User loadUserById(Long id) throws UserNotFoundException {
         return userRepository.findById(id).

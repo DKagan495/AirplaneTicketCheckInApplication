@@ -23,7 +23,6 @@ public class AuthService {
     final AuthenticationProvider provider;
     final TokenRepository tokenRepository;
 
-
     public void createVerificationToken(User user, String token){
         VerificationToken verificationToken = new VerificationToken(user, token);
         tokenRepository.save(verificationToken);
@@ -33,5 +32,4 @@ public class AuthService {
        return tokenRepository.findByToken(token)
                .orElseThrow(() -> new VerificationTokenNotFoundException("Verification token not found"));
     }
-
 }

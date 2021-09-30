@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
+//TODO: UserDataDto?
 public class UserEntityObjectResponse {
 
     private String firstName;

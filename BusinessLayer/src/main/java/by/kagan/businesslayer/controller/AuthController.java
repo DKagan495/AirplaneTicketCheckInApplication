@@ -20,7 +20,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-
+//TODO: какая мотивация такого названия метода?
     @PostMapping
     public ResponseEntity<AuthTransferObjectResponse> tryToAuthUser(@RequestBody AuthTransferObjectRequest authRequestDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(),

@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
-
+//TODO: принцип разбиения по пакетам не очевиден
 @Entity
 @Getter
 @Setter
@@ -40,7 +40,6 @@ public class VerificationToken {
         return new Date(calendar.getTime().getTime());
     }
 
-//    TODO: зачем явный вызов super?
     public VerificationToken (User user, String token){
         this.user = user;
         this.token = token;

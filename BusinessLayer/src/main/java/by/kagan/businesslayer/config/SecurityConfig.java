@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(USER_ENDPOINTS).authenticated()
+//                TODO: почему используется литерал роли?
                 .antMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
                 .antMatchers(FREE_ENDPOINTS_SIGN_UP, FREE_ENDPOINTS_AUTH).permitAll()
                 .and()
