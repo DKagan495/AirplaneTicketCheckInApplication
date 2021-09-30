@@ -1,7 +1,7 @@
 package by.kagan.businesslayer.auth.token.jwt;
 
 import by.kagan.businesslayer.auth.token.model.Account;
-import by.kagan.businesslayer.auth.token.service.AccountAuthorizationService;
+import by.kagan.businesslayer.service.AccountAuthorizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

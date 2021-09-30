@@ -1,4 +1,4 @@
-package by.kagan.businesslayer.auth.token.verification;
+package by.kagan.businesslayer.domain;
 
 import by.kagan.businesslayer.domain.User;
 import lombok.Getter;

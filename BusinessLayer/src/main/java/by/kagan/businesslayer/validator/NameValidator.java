@@ -21,11 +21,13 @@ public class NameValidator implements Validator{
     @Override
     public void validate(Object target, Errors errors) {
         UserRequest userRequest = (UserRequest) target;
+
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "firstName is empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "lastName is empty");
+
         String firstName = userRequest.getFirstName();
         String lastName = userRequest.getLastName();
-        log.info(firstName + "fuckup");
+
         if(firstName.charAt(0) != firstName.toUpperCase().charAt(0)){
             errors.rejectValue("firstName", "The first letter of the firstName should be in upper case");
         }

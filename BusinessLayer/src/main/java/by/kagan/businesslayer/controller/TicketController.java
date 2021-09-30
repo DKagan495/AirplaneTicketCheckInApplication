@@ -7,10 +7,13 @@ import by.kagan.businesslayer.service.TicketService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,14 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TicketController {
     private final TicketService ticketService;
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<HttpStatus> getTicket(TicketRequest request){
+    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<HttpStatus> getTicket(TicketRequest request, Principal principal){
         Ticket ticket = TicketRequestToTicketMapper.map(request);
-
-        ticketService.create(ticket);
+        ticketService.create(principal.getName(), ticket);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
-
 }

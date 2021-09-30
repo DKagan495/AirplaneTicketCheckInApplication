@@ -4,6 +4,7 @@ import by.kagan.businesslayer.domain.Ticket;
 import by.kagan.businesslayer.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -14,10 +15,11 @@ public class TicketService {
 
     private final UserService userService;
 
-    private Principal principal;
 
-    public Ticket create(Ticket ticket){
-        ticket.setUserId(userService.getUserByEmail(principal.getName()).getId());
+
+    @Transactional
+    public Ticket create(String email, Ticket ticket){
+        ticket.setUserId(userService.getUserByEmail(email).getId());
         ticketRepository.save(ticket);
         return ticket;
     }

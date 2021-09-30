@@ -1,13 +1,11 @@
 package by.kagan.businesslayer.config;
 
 import by.kagan.businesslayer.auth.token.jwt.JwtFilter;
-import by.kagan.businesslayer.auth.token.service.AccountAuthorizationService;
+import by.kagan.businesslayer.service.AccountAuthorizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String FREE_ENDPOINTS_AUTH = "/api/auth/**";
     private static final String FREE_ENDPOINTS_SIGN_UP = "/api/signup/**";
     private static final String USER_ENDPOINTS = "/api/user/**";
-    private static final String ADMIN_ENDPOINTS = "/api/admin/**";
 
     private final JwtFilter jwtFilter;
 
@@ -47,8 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(USER_ENDPOINTS).authenticated()
-//                TODO: почему используется литерал роли?
-                .antMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
                 .antMatchers(FREE_ENDPOINTS_SIGN_UP, FREE_ENDPOINTS_AUTH).permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

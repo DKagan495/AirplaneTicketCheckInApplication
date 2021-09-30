@@ -12,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 public class Airport {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,5 +26,4 @@ public class Airport {
 
     @OneToMany(mappedBy = "airportTo")
     private Set<Flight> flightsTo;
-
 }

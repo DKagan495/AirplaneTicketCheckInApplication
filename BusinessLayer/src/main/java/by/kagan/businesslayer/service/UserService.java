@@ -2,7 +2,6 @@ package by.kagan.businesslayer.service;
 
 import by.kagan.businesslayer.auth.enumeration.Role;
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.exception.PasswordsNotMatchesException;
 import by.kagan.businesslayer.exception.UserNotFoundException;
 import by.kagan.businesslayer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,13 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 
 @Service
-//TODO: transactional only for write-methods
-@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
@@ -24,7 +20,8 @@ public class UserService {
 
     private final PasswordEncoder encoder;
 
-    public User create(User user) throws PasswordsNotMatchesException {
+    @Transactional
+    public User create(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER);
         user.setAccountEnabled(false);
@@ -33,6 +30,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public User updateUser(User user) {
         userRepository.save(user);
         return user;

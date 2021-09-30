@@ -1,4 +1,4 @@
-package by.kagan.businesslayer.auth.token.service;
+package by.kagan.businesslayer.service;
 
 import by.kagan.businesslayer.auth.token.model.Account;
 import by.kagan.businesslayer.repository.UserRepository;

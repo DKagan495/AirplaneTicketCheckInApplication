@@ -1,6 +1,6 @@
 package by.kagan.businesslayer.repository;
 
-import by.kagan.businesslayer.auth.token.verification.VerificationToken;
+import by.kagan.businesslayer.domain.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

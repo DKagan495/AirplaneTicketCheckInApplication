@@ -1,6 +1,6 @@
 package by.kagan.businesslayer.service;
 
-import by.kagan.businesslayer.auth.token.verification.VerificationToken;
+import by.kagan.businesslayer.domain.VerificationToken;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.exception.VerificationTokenExpiredException;
 import by.kagan.businesslayer.exception.VerificationTokenNotFoundException;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AuthService {
 
     final UserRepository userRepository;
@@ -23,9 +22,11 @@ public class AuthService {
     final AuthenticationProvider provider;
     final TokenRepository tokenRepository;
 
-    public void createVerificationToken(User user, String token){
+    @Transactional
+    public VerificationToken createVerificationToken(User user, String token){
         VerificationToken verificationToken = new VerificationToken(user, token);
         tokenRepository.save(verificationToken);
+        return verificationToken;
     }
 
     public VerificationToken loadVerificationToken(String token) throws VerificationTokenNotFoundException, VerificationTokenExpiredException {

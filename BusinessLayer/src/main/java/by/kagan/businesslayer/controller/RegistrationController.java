@@ -1,6 +1,6 @@
 package by.kagan.businesslayer.controller;
 
-import by.kagan.businesslayer.auth.token.verification.VerificationToken;
+import by.kagan.businesslayer.domain.VerificationToken;
 import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistrationEvent;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.request.UserRequest;
@@ -16,7 +16,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +40,6 @@ public class RegistrationController {
 
     @InitBinder("userRequest")
     private void initBinder(WebDataBinder binder){
-        log.info("Hello");
         binder.setValidator(nameValidator);
     }
 

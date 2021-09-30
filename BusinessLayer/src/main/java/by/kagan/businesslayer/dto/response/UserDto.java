@@ -1,12 +1,11 @@
-package by.kagan.businesslayer.dto;
+package by.kagan.businesslayer.dto.response;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-//TODO: UserDataDto?
-public class UserEntityObjectResponse {
+public class UserDto {
 
     private String firstName;
 

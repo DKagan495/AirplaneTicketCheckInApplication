@@ -12,36 +12,24 @@ import by.kagan.businesslayer.validator.NameValidator;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "Admin Panel")
-@RequestMapping(value = "/api/admin")
-public class AdminController {
-    private final UserService userService;
-
-    private final FlightService flightService;
-
+@Api(tags = "Airport Information")
+@RequestMapping(value = "/api/user/airports")
+public class AirportController {
     private final AirportService airportService;
 
-
-    @PostMapping(value = "/flights/create")
-    public ResponseEntity<HttpStatus> createFlight(FlightRequest request){
-        flightService.create(FlightRequestToFlightMapper.map(request));
-
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/airports/create")
-    public ResponseEntity<HttpStatus> createAirport(AirportRequest request){
+    @Secured("ROLE_ADMIN")
+    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<HttpStatus> createAirport(@RequestBody AirportRequest request){
         airportService.create(AirportRequestToAirportMapper.map(request));
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
-
-
 }

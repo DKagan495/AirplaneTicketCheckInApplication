@@ -1,14 +1,12 @@
 package by.kagan.businesslayer.mapper;
 
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.dto.UserEntityObjectResponse;
-import lombok.RequiredArgsConstructor;
+import by.kagan.businesslayer.dto.response.UserDto;
 
-@RequiredArgsConstructor
 public class UserToUserDtoMapper {
 
-    public static UserEntityObjectResponse mapToResponse(User user){
-        UserEntityObjectResponse resultResponse = new UserEntityObjectResponse();
+    public static UserDto mapToResponse(User user){
+        UserDto resultResponse = new UserDto();
 
         resultResponse.setFirstName(user.getFirstName());
         resultResponse.setLastName(user.getLastName());
