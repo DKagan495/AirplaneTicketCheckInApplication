@@ -3,24 +3,25 @@ package by.kagan.businesslayer.controller;
 import by.kagan.businesslayer.auth.token.verification.VerificationToken;
 import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistrationEvent;
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.dto.UserEntityObjectRequest;
+import by.kagan.businesslayer.dto.request.UserRequest;
 import by.kagan.businesslayer.exception.VerificationTokenExpiredException;
 import by.kagan.businesslayer.mapper.RequestToUserMapper;
-import by.kagan.businesslayer.mapper.UserToUserDtoMapper;
 import by.kagan.businesslayer.service.AuthService;
 import by.kagan.businesslayer.service.UserService;
+import by.kagan.businesslayer.validator.NameValidator;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.time.Instant;
 import java.util.Date;
 
@@ -28,7 +29,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 @RequestMapping("/api/signup")
 @Api(tags = "Sign Up and Account Verifying")
+@Slf4j
 public class RegistrationController {
+    private final NameValidator nameValidator;
 
     private final AuthService authService;
 
@@ -36,16 +39,19 @@ public class RegistrationController {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    @InitBinder("userRequest")
+    private void initBinder(WebDataBinder binder){
+        log.info("Hello");
+        binder.setValidator(nameValidator);
+    }
+
 //TODO: валидации добавлять через @InitBinder, если необходимо. Не использовать классы валидаторов в методах-эндпоинтах
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody UserEntityObjectRequest entityUserEntityObjectRequest, BindingResult bindingResult, final HttpServletRequest request){
-        if(bindingResult.hasErrors() || bindingResult.hasFieldErrors()){
-            bindingResult.getAllErrors().forEach(System.out::println);
-            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<HttpStatus> signup(@Valid @RequestBody UserRequest userRequest, final HttpServletRequest request){
 
-        User user = RequestToUserMapper.map(entityUserEntityObjectRequest);
+        User user = RequestToUserMapper.map(userRequest);
         userService.create(user);
+
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new AfterCompleteRegistrationEvent(user, request.getLocale(), appUrl));
 

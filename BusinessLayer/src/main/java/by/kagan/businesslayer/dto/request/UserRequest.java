@@ -1,6 +1,5 @@
-package by.kagan.businesslayer.dto;
+package by.kagan.businesslayer.dto.request;
 
-import by.kagan.businesslayer.validator.annotaion.Match;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -14,8 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@Match(field = "password", fieldMatch = "confirmPassword", message = "Password not matches with confirmation")
-public class UserEntityObjectRequest {
+public class UserRequest {
 
     @NotBlank(message = "Field firstName cannot be empty")
     @NotNull(message = "Field firstName is null")
@@ -38,11 +36,6 @@ public class UserEntityObjectRequest {
     @NotNull(message = "Field password is null")
     @Size(min = 8, message = "Password cannot be less than 8 symbols")
     private String password;
-
-    @JsonProperty("confirmPassword")
-    @NotBlank(message = "Field confirmPassword cannot be empty")
-    @NotNull(message = "confirm password is null")
-    private String confirmPassword;
 
     @JsonIgnore
     private boolean isAccountEnabled;

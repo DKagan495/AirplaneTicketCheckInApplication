@@ -2,12 +2,13 @@ package by.kagan.businesslayer.controller;
 
 import by.kagan.businesslayer.auth.token.jwt.JwtAuthProvider;
 import by.kagan.businesslayer.dto.AuthTransferObjectResponse;
-import by.kagan.businesslayer.dto.AuthTransferObjectRequest;
+import by.kagan.businesslayer.dto.AuthRequest;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,7 +23,7 @@ public class AuthController {
 
 //TODO: какая мотивация такого названия метода?
     @PostMapping
-    public ResponseEntity<AuthTransferObjectResponse> tryToAuthUser(@RequestBody AuthTransferObjectRequest authRequestDto) {
+    public ResponseEntity<AuthTransferObjectResponse> tryToAuthUser(@RequestBody AuthRequest authRequestDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(),
                 authRequestDto.getPassword()));
 

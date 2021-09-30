@@ -11,8 +11,7 @@ public class FlightService {
 
     private final FlightRepository flightRepository;
 
-//    TODO: create?
-    public Flight save(Flight flight){
+    public Flight create(Flight flight){
         flightRepository.save(flight);
         return flight;
     }

@@ -1,7 +1,6 @@
 package by.kagan.businesslayer.mapper;
 
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.dto.UserEntityObjectRequest;
 import by.kagan.businesslayer.dto.UserEntityObjectResponse;
 import lombok.RequiredArgsConstructor;
 

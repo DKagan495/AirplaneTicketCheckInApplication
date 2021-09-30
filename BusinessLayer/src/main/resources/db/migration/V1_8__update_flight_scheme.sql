@@ -1,1 +1,1 @@
-alter table flight add column ticketsLeft int not null default 0;
+alter table flight add column tickets_left int not null default 0;

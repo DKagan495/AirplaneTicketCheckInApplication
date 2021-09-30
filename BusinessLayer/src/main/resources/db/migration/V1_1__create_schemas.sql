@@ -19,8 +19,7 @@ create table flights
     id bigserial primary key not null,
     airport_from_id bigint not null,
     airport_to_id bigint not null,
-    flight_date date not null,
-    places_left int not null
+    flight_date date not null
 );
 
 create table airports

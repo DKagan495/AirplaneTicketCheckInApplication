@@ -1,17 +1,17 @@
 package by.kagan.businesslayer.mapper;
 
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.dto.UserEntityObjectRequest;
+import by.kagan.businesslayer.dto.request.UserRequest;
 
 public class RequestToUserMapper {
-    public static User map(UserEntityObjectRequest entityUserEntityObjectRequest){
+    public static User map(UserRequest entityUserRequest){
         User resultUser = new User();
 
-        resultUser.setFirstName(entityUserEntityObjectRequest.getFirstName());
-        resultUser.setLastName(entityUserEntityObjectRequest.getLastName());
-        resultUser.setDateOfBirth(entityUserEntityObjectRequest.getDateOfBirth());
-        resultUser.setEmail(entityUserEntityObjectRequest.getEmail());
-        resultUser.setPassword(entityUserEntityObjectRequest.getPassword());
+        resultUser.setFirstName(entityUserRequest.getFirstName());
+        resultUser.setLastName(entityUserRequest.getLastName());
+        resultUser.setDateOfBirth(entityUserRequest.getDateOfBirth());
+        resultUser.setEmail(entityUserRequest.getEmail());
+        resultUser.setPassword(entityUserRequest.getPassword());
 
         return resultUser;
     }

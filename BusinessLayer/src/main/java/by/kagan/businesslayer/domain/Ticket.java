@@ -16,14 +16,21 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "flight_id")
+    private Long flightId;
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",
+    insertable = false,
+    updatable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "flight_id")
+    @JoinColumn(name = "flight_id",
+    insertable = false,
+    updatable = false)
     private Flight flight;
-
-
-
 }
