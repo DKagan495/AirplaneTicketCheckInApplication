@@ -45,7 +45,6 @@ public class RegistrationController {
         binder.setValidator(nameValidator);
     }
 
-//TODO: валидации добавлять через @InitBinder, если необходимо. Не использовать классы валидаторов в методах-эндпоинтах
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> signup(@Valid @RequestBody UserRequest userRequest, final HttpServletRequest request){
 
