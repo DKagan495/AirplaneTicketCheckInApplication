@@ -5,7 +5,7 @@ import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistr
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.request.UserRequest;
 import by.kagan.businesslayer.exception.VerificationTokenExpiredException;
-import by.kagan.businesslayer.mapper.RequestToUserMapper;
+import by.kagan.businesslayer.mapper.UserRequestToUserMapper;
 import by.kagan.businesslayer.service.AuthService;
 import by.kagan.businesslayer.service.UserService;
 import by.kagan.businesslayer.validator.NameValidator;
@@ -38,6 +38,8 @@ public class RegistrationController {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    private final UserRequestToUserMapper toUserMapper;
+
     @InitBinder("userRequest")
     private void initBinder(WebDataBinder binder){
         binder.setValidator(nameValidator);
@@ -46,7 +48,7 @@ public class RegistrationController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> signup(@Valid @RequestBody UserRequest userRequest, final HttpServletRequest request){
 
-        User user = RequestToUserMapper.map(userRequest);
+        User user = toUserMapper.map(userRequest);
         userService.create(user);
 
         String appUrl = request.getContextPath();

@@ -20,6 +20,7 @@ public class Flight {
     private Long id;
 
 //    TODO: есть ли необходимость двусторонней связи? Должна ли быть eager? Рекомендую хранить id отдельным полем
+    //Если будет необходимость получить все полеты из конкретного аэропорта?(двусторонняя связь)
 
     @Column(name = "airport_from_id", nullable = false)
     private Long airportFromId;

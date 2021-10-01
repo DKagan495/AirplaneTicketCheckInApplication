@@ -2,16 +2,17 @@ package by.kagan.businesslayer.mapper;
 
 import by.kagan.businesslayer.domain.Flight;
 import by.kagan.businesslayer.dto.request.FlightRequest;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
-public class FlightRequestToFlightMapper {
+@Mapper(componentModel = "spring")
+public interface FlightRequestToFlightMapper {
 
-    public static Flight map(FlightRequest request){
-        Flight flight = new Flight();
-        flight.setAirportFromId(request.getAirportFromId());
-        flight.setAirportToId(request.getAirportToId());
-        flight.setDate(request.getDate());
-        flight.setTicketsLeft(request.getTicketsLeft());
-
-        return flight;
-    }
+    @Mappings({
+            @Mapping(target = "airportFrom", ignore = true),
+            @Mapping(target = "airportTo", ignore = true),
+            @Mapping(target = "tickets", ignore = true)
+    })
+    Flight map(FlightRequest request);
 }

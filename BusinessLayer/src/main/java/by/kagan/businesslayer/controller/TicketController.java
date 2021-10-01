@@ -22,9 +22,11 @@ import java.security.Principal;
 public class TicketController {
     private final TicketService ticketService;
 
+    private final TicketRequestToTicketMapper toTicketMapper;
+
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> getTicket(TicketRequest request, Principal principal){
-        Ticket ticket = TicketRequestToTicketMapper.map(request);
+        Ticket ticket = toTicketMapper.map(request);
         ticketService.create(principal.getName(), ticket);
 
         return ResponseEntity.ok(HttpStatus.OK);

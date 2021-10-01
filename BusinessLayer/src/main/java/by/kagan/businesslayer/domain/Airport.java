@@ -21,6 +21,7 @@ public class Airport {
 
 //    TODO: Почему set?
 //    TODO: Почему set?(х2)
+    // быстрая коллекция, хранит уникальные элементы. Каждый полет - уникальный объект.
     @OneToMany(mappedBy = "airportFrom")
     private Set<Flight> flightsFrom;
 

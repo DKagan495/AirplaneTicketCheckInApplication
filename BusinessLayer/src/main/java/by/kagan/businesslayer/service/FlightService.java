@@ -1,6 +1,7 @@
 package by.kagan.businesslayer.service;
 
 import by.kagan.businesslayer.domain.Flight;
+import by.kagan.businesslayer.exception.FlightNotFoundException;
 import by.kagan.businesslayer.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,7 @@ public class FlightService {
         return flightRepository.findAll();
     }
 
+    public Flight getById(Long id){
+       return flightRepository.findById(id).orElseThrow(()->new FlightNotFoundException(id));
+    }
 }

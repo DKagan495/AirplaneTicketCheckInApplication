@@ -2,17 +2,11 @@ package by.kagan.businesslayer.mapper;
 
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.response.UserDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
-public class UserToUserDtoMapper {
-
-    public static UserDto mapToResponse(User user){
-        UserDto resultResponse = new UserDto();
-
-        resultResponse.setFirstName(user.getFirstName());
-        resultResponse.setLastName(user.getLastName());
-        resultResponse.setDateOfBirth(user.getDateOfBirth());
-        resultResponse.setEmail(user.getEmail());
-
-        return resultResponse;
-    }
+@Mapper(componentModel = "spring")
+public interface UserToUserDtoMapper {
+    UserDto map(User user);
 }

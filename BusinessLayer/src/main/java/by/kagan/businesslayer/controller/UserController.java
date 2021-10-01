@@ -25,9 +25,11 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    private final UserToUserDtoMapper toUserDtoMapper;
+
     @GetMapping
     public List<UserDto> getAllUsers(){
-        return userService.loadAllUsers().stream().collect(ArrayList::new, (list, user)->list.add(UserToUserDtoMapper.mapToResponse(user)), ArrayList::addAll);
+        return userService.loadAllUsers().stream().collect(ArrayList::new, (list, user)->list.add(toUserDtoMapper.map(user)), ArrayList::addAll);
     }
 
     @GetMapping("/{id}")
@@ -37,6 +39,6 @@ public class UserController {
 
     @GetMapping("/current")
     public UserDto getPrincipal(Principal principal){
-        return UserToUserDtoMapper.mapToResponse(userService.getUserByEmail(principal.getName()));
+        return toUserDtoMapper.map(userService.getUserByEmail(principal.getName()));
     }
 }

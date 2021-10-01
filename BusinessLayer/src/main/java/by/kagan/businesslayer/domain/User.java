@@ -2,6 +2,7 @@ package by.kagan.businesslayer.domain;
 
 import by.kagan.businesslayer.auth.enumeration.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "\"user\"")
 public class User {
@@ -40,7 +42,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
     private Set<Ticket> tickets;
 }

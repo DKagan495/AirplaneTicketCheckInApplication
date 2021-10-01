@@ -36,9 +36,5 @@ public class UserRequest {
     @NotNull(message = "Field password is null")
     @Size(min = 8, message = "Password cannot be less than 8 symbols")
     private String password;
-
-    @JsonIgnore
-    private boolean isAccountEnabled;
-
 }
 

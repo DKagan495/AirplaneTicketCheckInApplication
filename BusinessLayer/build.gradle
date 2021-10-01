@@ -28,12 +28,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'org.flywaydb:flyway-core'
+    compileOnly "org.projectlombok:lombok"
+    compileOnly "org.mapstruct:mapstruct:1.4.2.Final"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+    annotationProcessor "org.projectlombok:lombok"
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.1.10'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.10'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.5'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.5'
     implementation group: 'commons-net', name: 'commons-net', version: '3.8.0'
+    implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
+
+
 
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'org.jetbrains:annotations:20.1.0'
