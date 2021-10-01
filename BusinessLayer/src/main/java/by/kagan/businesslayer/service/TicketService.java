@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +23,9 @@ public class TicketService {
         ticket.setUserId(userService.getUserByEmail(email).getId());
         ticketRepository.save(ticket);
         return ticket;
+    }
+
+    public List<Ticket> getAll(){
+        return ticketRepository.findAll();
     }
 }
