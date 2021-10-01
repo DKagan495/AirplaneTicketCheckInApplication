@@ -4,6 +4,7 @@ import by.kagan.businesslayer.domain.Flight;
 import by.kagan.businesslayer.exception.FlightNotFoundException;
 import by.kagan.businesslayer.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class FlightService {
     private final FlightRepository flightRepository;
 
     @Transactional
+    @Cacheable(value = "flight")
     public Flight create(Flight flight){
         flightRepository.save(flight);
         return flight;
