@@ -41,6 +41,21 @@ public class TicketController {
 
     @GetMapping
     public List<TicketResponse> getAll(){
-        return ticketService.getAll().stream().collect(ArrayList::new, (list, ticket)->list.add(toTicketResponseMapper.map(ticket)), ArrayList::addAll);
+        return ticketService
+                .getAll()
+                .stream()
+                .collect(ArrayList::new,
+                         (list, ticket)->list.add(toTicketResponseMapper.map(ticket)),
+                         ArrayList::addAll);
+    }
+
+    @GetMapping(value = "/my")
+    public List<TicketResponse> getCurrentUserTickets(Principal principal){
+        return ticketService
+                .getAllByEmail(principal.getName())
+                .stream()
+                .collect(ArrayList::new,
+                         (list, ticket)->list.add(toTicketResponseMapper.map(ticket)),
+                         ArrayList::addAll);
     }
 }

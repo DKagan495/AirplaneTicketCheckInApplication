@@ -1,6 +1,7 @@
 package by.kagan.businesslayer.service;
 
 import by.kagan.businesslayer.domain.Ticket;
+import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,5 +30,10 @@ public class TicketService {
 
     public List<Ticket> getAll(){
         return ticketRepository.findAll();
+    }
+
+    public List<Ticket> getAllByEmail(String email){
+        User user = userService.getUserByEmail(email);
+        return ticketRepository.findAllByUser(user);
     }
 }
