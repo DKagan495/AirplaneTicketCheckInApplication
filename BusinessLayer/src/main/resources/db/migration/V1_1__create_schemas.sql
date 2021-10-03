@@ -4,7 +4,7 @@ create table users
     first_name          varchar                             not null,
     last_name           varchar                             not null,
     date_of_birth       date                                not null,
-    email               varchar                             not null,
+    email               varchar                             not null        unique,
     password            varchar                             not null,
     role_id             bigint
 );

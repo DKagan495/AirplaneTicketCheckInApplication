@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-//TODO: разбиение по пакетам производится через группировку по уровням логики, а не по области месту применения класса
 @Service
 @RequiredArgsConstructor
 public class AccountAuthorizationService implements UserDetailsService {

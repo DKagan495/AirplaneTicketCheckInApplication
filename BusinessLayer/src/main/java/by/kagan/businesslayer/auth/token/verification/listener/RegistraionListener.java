@@ -1,28 +1,26 @@
 package by.kagan.businesslayer.auth.token.verification.listener;
 
+import by.kagan.businesslayer.auth.token.jwt.JwtProvider;
 import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistrationEvent;
 import by.kagan.businesslayer.domain.User;
-import by.kagan.businesslayer.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Component
 public class RegistraionListener implements ApplicationListener<AfterCompleteRegistrationEvent> {
 
-    @Autowired
-    private AuthService authService;
+    private final JavaMailSender mailSender;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JwtProvider provider;
 
-//TODO: зачем?
     @Override
     public void onApplicationEvent(AfterCompleteRegistrationEvent event) {
         this.confirmRegistration(event);
@@ -31,8 +29,7 @@ public class RegistraionListener implements ApplicationListener<AfterCompleteReg
     private void confirmRegistration(AfterCompleteRegistrationEvent event){
         User user = event.getUser();
 
-        String token = UUID.randomUUID().toString();
-        authService.createVerificationToken(user, token);
+        String token = provider.getToken(user.getEmail());
 
         String recAdress = user.getEmail();
         String subject = "Confirm Registration";

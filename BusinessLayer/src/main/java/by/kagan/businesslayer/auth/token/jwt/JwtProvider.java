@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 @Component
-public class JwtAuthProvider {
+public class JwtProvider {
 
     private static final String KEY = "sometimes";
 

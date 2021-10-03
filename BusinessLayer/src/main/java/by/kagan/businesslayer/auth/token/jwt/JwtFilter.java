@@ -19,7 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
 
-    private final JwtAuthProvider provider;
+    private final JwtProvider provider;
 
     private final AccountAuthorizationService authorizationService;
 
