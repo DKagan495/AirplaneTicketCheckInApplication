@@ -33,13 +33,6 @@ public class UserService {
         return user;
     }
 
-    @Transactional
-    @CachePut(value = "user", key = "#user.email")
-    public User updateUser(User user) {
-        userRepository.save(user);
-        return user;
-    }
-
 
     public List<User> loadAllUsers() {
         return userRepository.findAll();
@@ -51,10 +44,24 @@ public class UserService {
                 orElseThrow(()->new UserNotFoundException("User with this id not exists"));
     }
 
+    @Cacheable(value = "user")
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User with this email not exists"));
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User with this email not exists"));
     }
 
+    @Transactional
+    @CachePut(value = "user", key = "#user.email")
+    public User update(Long id, User user){
+        user.setId(id);
+        userRepository.save(user);
+        return user;
+    }
 
+    @Transactional
+    public void delete(Long id){
+        userRepository.deleteById(id);
+    }
 
 }

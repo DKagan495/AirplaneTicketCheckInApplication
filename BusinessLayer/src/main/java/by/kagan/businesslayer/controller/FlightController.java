@@ -31,7 +31,12 @@ public class FlightController {
 
     @GetMapping
     public List<FlightResponse> getAll(){
-        return flightService.getAllFlights().stream().collect(ArrayList::new, (list, flight)->list.add(toFlightDtoMapper.map(flight)), ArrayList::addAll);
+        return flightService
+                .getAll()
+                .stream()
+                .collect(ArrayList::new,
+                         (list, flight)->list.add(toFlightDtoMapper.map(flight)),
+                         ArrayList::addAll);
     }
 
     @GetMapping("/{id}")
@@ -41,9 +46,20 @@ public class FlightController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> createFlight(@RequestBody FlightRequest request){
-        flightService.create(toFlightMapper.map(request));
+    public ResponseEntity<FlightResponse> create(@RequestBody FlightRequest request){
+        return new ResponseEntity<>(toFlightDtoMapper.map(flightService.create(toFlightMapper.map(request))), HttpStatus.CREATED);
+    }
 
+    @Secured("ROLE_ADMIN")
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<FlightResponse> update(@PathVariable Long id, FlightRequest request){
+        return new ResponseEntity<>(toFlightDtoMapper.map(flightService.update(id, toFlightMapper.map(request))), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
+        flightService.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

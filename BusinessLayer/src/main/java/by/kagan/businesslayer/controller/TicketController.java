@@ -58,4 +58,5 @@ public class TicketController {
                          (list, ticket)->list.add(toTicketResponseMapper.map(ticket)),
                          ArrayList::addAll);
     }
+
 }

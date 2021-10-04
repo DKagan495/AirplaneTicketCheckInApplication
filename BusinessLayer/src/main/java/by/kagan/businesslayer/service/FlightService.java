@@ -4,6 +4,7 @@ import by.kagan.businesslayer.domain.Flight;
 import by.kagan.businesslayer.exception.FlightNotFoundException;
 import by.kagan.businesslayer.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +24,23 @@ public class FlightService {
         return flight;
     }
 
-    public List<Flight> getAllFlights(){
+    public List<Flight> getAll(){
         return flightRepository.findAll();
     }
 
     public Flight getById(Long id){
        return flightRepository.findById(id).orElseThrow(()->new FlightNotFoundException(id));
+    }
+
+    @Transactional
+    @CachePut(value = "flight")
+    public Flight update(Long id, Flight flight){
+        flight.setId(id);
+        flightRepository.save(flight);
+        return flight;
+    }
+
+    public void delete(Long id){
+        flightRepository.deleteById(id);
     }
 }

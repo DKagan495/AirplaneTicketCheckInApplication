@@ -63,7 +63,7 @@ public class RegistrationController {
         User user = userService.getUserByEmail(email);
 
         user.setAccountEnabled(true);
-        userService.updateUser(user);
+        userService.update(user.getId(), user);
 
         return ResponseEntity.accepted().body(HttpStatus.ACCEPTED);
     }
