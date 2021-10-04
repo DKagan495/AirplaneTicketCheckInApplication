@@ -53,8 +53,8 @@ public class UserController {
     @PatchMapping(value = "/{id}")
     public ResponseEntity<UserDto> update(@PathVariable Long id,
                                           @RequestBody UserRequest request, Principal principal){
-        if(!(userService.loadUserById(id).getEmail().equals(principal.getName())
-                || userService.getUserByEmail(principal.getName()).getRole().equals(Role.ROLE_ADMIN))){
+        if(!userService.loadUserById(id).getEmail().equals(principal.getName())
+                && !userService.getUserByEmail(principal.getName()).getRole().equals(Role.ROLE_ADMIN)){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -64,8 +64,8 @@ public class UserController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id, Principal principal){
-        if(!(userService.loadUserById(id).getEmail().equals(principal.getName())
-                || userService.getUserByEmail(principal.getName()).getRole().equals(Role.ROLE_ADMIN))){
+        if(!userService.loadUserById(id).getEmail().equals(principal.getName())
+                && !userService.getUserByEmail(principal.getName()).getRole().equals(Role.ROLE_ADMIN)){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 

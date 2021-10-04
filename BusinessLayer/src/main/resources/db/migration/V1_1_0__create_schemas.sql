@@ -5,8 +5,7 @@ create table users
     last_name           varchar                             not null,
     date_of_birth       date                                not null,
     email               varchar                             not null        unique,
-    password            varchar                             not null,
-    role_id             bigint
+    password            varchar                             not null
 );
 
 create table roles
