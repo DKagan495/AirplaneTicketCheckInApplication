@@ -47,13 +47,15 @@ public class FlightController {
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FlightResponse> create(@RequestBody FlightRequest request){
-        return new ResponseEntity<>(toFlightDtoMapper.map(flightService.create(toFlightMapper.map(request))), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                toFlightDtoMapper.map(flightService.create(toFlightMapper.map(request))), HttpStatus.CREATED);
     }
 
     @Secured("ROLE_ADMIN")
     @PatchMapping(value = "/{id}")
     public ResponseEntity<FlightResponse> update(@PathVariable Long id, FlightRequest request){
-        return new ResponseEntity<>(toFlightDtoMapper.map(flightService.update(id, toFlightMapper.map(request))), HttpStatus.OK);
+        return new ResponseEntity<>(
+                toFlightDtoMapper.map(flightService.update(id, toFlightMapper.map(request))), HttpStatus.OK);
     }
 
     @Secured("ROLE_ADMIN")

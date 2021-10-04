@@ -50,29 +50,26 @@ public class RegistrationController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> signup(@Valid @RequestBody UserRequest userRequest, final HttpServletRequest request){
-
         User user = toUserMapper.map(userRequest);
 
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new AfterCompleteRegistrationEvent(user, request.getLocale(), appUrl));
 
-        user = userService.create(user);
-
-        return new ResponseEntity<>(toUserDtoMapper.map(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(toUserDtoMapper.map(userService.create(user)), HttpStatus.CREATED);
     }
 
 
     @GetMapping(value = "/verify")
-    public ResponseEntity<HttpStatus> confirmAccount(@RequestParam String token){
+    public ResponseEntity<UserDto> confirmAccount(@RequestParam String token){
         String email = provider.getUsername(token);
+
         if(!provider.validateToken(token)){
-            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         User user = userService.getUserByEmail(email);
-
         user.setAccountEnabled(true);
-        userService.update(user.getId(), user);
 
-        return ResponseEntity.accepted().body(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(toUserDtoMapper.map(userService.update(user.getId(), user)), HttpStatus.ACCEPTED);
     }
 }

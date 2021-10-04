@@ -5,6 +5,7 @@ import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.exception.UserNotFoundException;
 import by.kagan.businesslayer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,6 +61,7 @@ public class UserService {
     }
 
     @Transactional
+    @CacheEvict(value = "user")
     public void delete(Long id){
         userRepository.deleteById(id);
     }

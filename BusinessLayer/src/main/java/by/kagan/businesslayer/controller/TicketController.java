@@ -11,10 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -32,13 +31,14 @@ public class TicketController {
     private final TicketToTicketResponseMapper toTicketResponseMapper;
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> getTicket(TicketRequest request, Principal principal){
+    public ResponseEntity<TicketResponse> create(TicketRequest request, Principal principal){
         Ticket ticket = toTicketMapper.map(request);
         ticketService.create(principal.getName(), ticket);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        return new ResponseEntity<>(toTicketResponseMapper.map(ticket), HttpStatus.CREATED);
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping
     public List<TicketResponse> getAll(){
         return ticketService
@@ -57,6 +57,22 @@ public class TicketController {
                 .collect(ArrayList::new,
                          (list, ticket)->list.add(toTicketResponseMapper.map(ticket)),
                          ArrayList::addAll);
+    }
+
+
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<TicketResponse> update(@PathVariable Long id, @RequestBody TicketRequest request){
+        Ticket updatedTicket = ticketService.update(id, toTicketMapper.map(request));
+
+        return new ResponseEntity<>(toTicketResponseMapper.map(updatedTicket), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
+        ticketService.delete(id);
+
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

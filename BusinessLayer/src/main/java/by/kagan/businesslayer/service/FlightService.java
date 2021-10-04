@@ -4,6 +4,7 @@ import by.kagan.businesslayer.domain.Flight;
 import by.kagan.businesslayer.exception.FlightNotFoundException;
 import by.kagan.businesslayer.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,8 @@ public class FlightService {
         return flight;
     }
 
+    @CacheEvict(value = "flight")
+    @Transactional
     public void delete(Long id){
         flightRepository.deleteById(id);
     }

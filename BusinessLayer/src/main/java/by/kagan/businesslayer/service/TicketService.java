@@ -4,6 +4,7 @@ import by.kagan.businesslayer.domain.Ticket;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class TicketService {
 
 
 
-    @Transactional
     @Cacheable(value = "ticket")
+    @Transactional
     public Ticket create(String email, Ticket ticket){
         ticket.setUserId(userService.getUserByEmail(email).getId());
         ticketRepository.save(ticket);
@@ -44,5 +45,11 @@ public class TicketService {
         ticket.setId(id);
         ticketRepository.save(ticket);
         return ticket;
+    }
+
+    @CacheEvict(value = "ticket")
+    @Transactional
+    public void delete(Long id){
+        ticketRepository.deleteById(id);
     }
 }
