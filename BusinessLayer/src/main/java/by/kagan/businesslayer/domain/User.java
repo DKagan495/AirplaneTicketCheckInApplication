@@ -36,7 +36,7 @@ public class User {
     private Date dateOfBirth;
 
 //    TODO: достаточно просто enabled
-    @Column(name = "acc_enabled")
+    @Column(name = "enabled")
     private boolean isAccountEnabled;
 
     @Enumerated(EnumType.STRING)

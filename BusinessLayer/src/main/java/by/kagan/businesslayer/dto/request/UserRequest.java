@@ -32,9 +32,7 @@ public class UserRequest {
     @Email(message = "Email should be email")
     private String email;
 
-    @NotBlank(message = "Field password cannot be empty")
     @NotNull(message = "Field password is null")
-    @Size(min = 8, message = "Password cannot be less than 8 symbols")
     private String password;
 }
 

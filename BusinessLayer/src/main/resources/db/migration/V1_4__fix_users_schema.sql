@@ -1,1 +1,0 @@
-alter table users add column acc_enabled bool default false;

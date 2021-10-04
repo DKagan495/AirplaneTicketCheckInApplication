@@ -7,6 +7,7 @@ import by.kagan.businesslayer.dto.request.UserRequest;
 import by.kagan.businesslayer.mapper.UserRequestToUserMapper;
 import by.kagan.businesslayer.service.UserService;
 import by.kagan.businesslayer.validator.NameValidator;
+import by.kagan.businesslayer.validator.PasswordValidator;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,8 @@ import javax.validation.Valid;
 public class RegistrationController {
     private final NameValidator nameValidator;
 
+    private final PasswordValidator passwordValidator;
+
     private final UserService userService;
 
     private final ApplicationEventPublisher eventPublisher;
@@ -38,7 +41,7 @@ public class RegistrationController {
 
     @InitBinder("userRequest")
     private void initBinder(WebDataBinder binder){
-        binder.setValidator(nameValidator);
+        binder.addValidators(nameValidator, passwordValidator);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
