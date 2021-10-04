@@ -1,5 +1,6 @@
 package by.kagan.businesslayer.controller;
 
+import by.kagan.businesslayer.auth.enumeration.Role;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.request.UserRequest;
 import by.kagan.businesslayer.dto.response.UserDto;
@@ -50,13 +51,24 @@ public class UserController {
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable Long id, UserRequest request){
+    public ResponseEntity<UserDto> update(@PathVariable Long id,
+                                          @RequestBody UserRequest request, Principal principal){
+        if(!(userService.loadUserById(id).getEmail().equals(principal.getName())
+                || userService.getUserByEmail(principal.getName()).getRole().equals(Role.ROLE_ADMIN))){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         return new ResponseEntity<>(toUserDtoMapper
                 .map(userService.update(id, toUserMapper.map(request))), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long id, Principal principal){
+        if(!(userService.loadUserById(id).getEmail().equals(principal.getName())
+                || userService.getUserByEmail(principal.getName()).getRole().equals(Role.ROLE_ADMIN))){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         userService.delete(id);
 
         return ResponseEntity.ok(HttpStatus.OK);

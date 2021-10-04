@@ -2,6 +2,7 @@ package by.kagan.businesslayer.service;
 
 import by.kagan.businesslayer.domain.Ticket;
 import by.kagan.businesslayer.domain.User;
+import by.kagan.businesslayer.exception.TicketNotFoundException;
 import by.kagan.businesslayer.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -28,6 +29,11 @@ public class TicketService {
         ticket.setUserId(userService.getUserByEmail(email).getId());
         ticketRepository.save(ticket);
         return ticket;
+    }
+
+    @Cacheable(value = "ticket")
+    public Ticket getById(Long id){
+        return ticketRepository.findById(id).orElseThrow(()->new TicketNotFoundException(id));
     }
 
     public List<Ticket> getAll(){

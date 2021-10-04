@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -31,7 +30,7 @@ public class TicketController {
     private final TicketToTicketResponseMapper toTicketResponseMapper;
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TicketResponse> create(TicketRequest request, Principal principal){
+    public ResponseEntity<TicketResponse> create(@RequestBody TicketRequest request, Principal principal){
         Ticket ticket = toTicketMapper.map(request);
         ticketService.create(principal.getName(), ticket);
 
@@ -59,17 +58,25 @@ public class TicketController {
                          ArrayList::addAll);
     }
 
-
-
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<TicketResponse> update(@PathVariable Long id, @RequestBody TicketRequest request){
+    public ResponseEntity<TicketResponse> update(@PathVariable Long id,
+                                                 @RequestBody TicketRequest request,
+                                                 Principal principal){
+        if(!ticketService.getById(id).getUser().getEmail().equals(principal.getName())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Ticket updatedTicket = ticketService.update(id, toTicketMapper.map(request));
 
         return new ResponseEntity<>(toTicketResponseMapper.map(updatedTicket), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long id, Principal principal){
+        if(!ticketService.getById(id).getUser().getEmail().equals(principal.getName())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         ticketService.delete(id);
 
         return ResponseEntity.ok(HttpStatus.OK);

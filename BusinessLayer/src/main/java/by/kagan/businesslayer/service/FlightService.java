@@ -15,11 +15,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FlightService {
-
     private final FlightRepository flightRepository;
 
-    @Transactional
     @Cacheable(value = "flight")
+    @Transactional
     public Flight create(Flight flight){
         flightRepository.save(flight);
         return flight;
@@ -34,8 +33,8 @@ public class FlightService {
        return flightRepository.findById(id).orElseThrow(()->new FlightNotFoundException(id));
     }
 
-    @Transactional
     @CachePut(value = "flight", key = "#flight.id")
+    @Transactional
     public Flight update(Long id, Flight flight){
         flight.setId(id);
         flightRepository.save(flight);

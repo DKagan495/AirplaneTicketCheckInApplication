@@ -49,7 +49,8 @@ public class RegistrationController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> signup(@Valid @RequestBody UserRequest userRequest, final HttpServletRequest request){
+    public ResponseEntity<UserDto> signup(@Valid @RequestBody UserRequest userRequest,
+                                          final HttpServletRequest request){
         User user = toUserMapper.map(userRequest);
 
         String appUrl = request.getContextPath();
