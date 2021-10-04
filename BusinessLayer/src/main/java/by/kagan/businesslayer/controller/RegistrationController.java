@@ -4,7 +4,9 @@ import by.kagan.businesslayer.auth.token.jwt.JwtProvider;
 import by.kagan.businesslayer.auth.token.verification.event.AfterCompleteRegistrationEvent;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.dto.request.UserRequest;
+import by.kagan.businesslayer.dto.response.UserDto;
 import by.kagan.businesslayer.mapper.UserRequestToUserMapper;
+import by.kagan.businesslayer.mapper.UserToUserDtoMapper;
 import by.kagan.businesslayer.service.UserService;
 import by.kagan.businesslayer.validator.NameValidator;
 import by.kagan.businesslayer.validator.PasswordValidator;
@@ -37,6 +39,8 @@ public class RegistrationController {
 
     private final UserRequestToUserMapper toUserMapper;
 
+    private final UserToUserDtoMapper toUserDtoMapper;
+
     private final JwtProvider provider;
 
     @InitBinder("userRequest")
@@ -45,15 +49,16 @@ public class RegistrationController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> signup(@Valid @RequestBody UserRequest userRequest, final HttpServletRequest request){
+    public ResponseEntity<UserDto> signup(@Valid @RequestBody UserRequest userRequest, final HttpServletRequest request){
 
         User user = toUserMapper.map(userRequest);
-        userService.create(user);
 
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new AfterCompleteRegistrationEvent(user, request.getLocale(), appUrl));
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        user = userService.create(user);
+
+        return new ResponseEntity<>(toUserDtoMapper.map(user), HttpStatus.CREATED);
     }
 
 

@@ -28,12 +28,13 @@ public class FlightService {
         return flightRepository.findAll();
     }
 
+    @Cacheable(value = "flight")
     public Flight getById(Long id){
        return flightRepository.findById(id).orElseThrow(()->new FlightNotFoundException(id));
     }
 
     @Transactional
-    @CachePut(value = "flight")
+    @CachePut(value = "flight", key = "#flight.id")
     public Flight update(Long id, Flight flight){
         flight.setId(id);
         flightRepository.save(flight);
