@@ -13,7 +13,8 @@ public interface UserRequestToUserMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "tickets", ignore = true),
             @Mapping(target = "role", ignore = true),
-            @Mapping(target = "accountEnabled", ignore = true)
+            @Mapping(target = "enabled", ignore = true),
+            @Mapping(target = "deleted", ignore = true)
     })
     User map(UserRequest request);
 }

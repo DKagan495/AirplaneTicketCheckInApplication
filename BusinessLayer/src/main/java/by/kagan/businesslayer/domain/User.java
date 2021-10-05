@@ -6,8 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import java.util.Date;
 import java.util.Set;
@@ -19,6 +23,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "\"user\"")
+@SQLDelete(sql = "UPDATE \"user\" SET deleted = true WHERE id=?")
+@FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "onlyDeleted", type = "boolean"))
+@Filter(name = "deletedUserFilter", condition = "deleted = :onlyDeleted")
 public class User {
 
     @Id
@@ -37,7 +44,9 @@ public class User {
 
 //    TODO: достаточно просто enabled
     @Column(name = "enabled")
-    private boolean isAccountEnabled;
+    private boolean enabled;
+
+    private boolean deleted = false;
 
     @Enumerated(EnumType.STRING)
     private Role role;

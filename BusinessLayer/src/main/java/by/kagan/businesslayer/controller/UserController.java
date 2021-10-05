@@ -31,13 +31,23 @@ public class UserController {
     private final UserRequestToUserMapper toUserMapper;
 
     @GetMapping
-    public List<UserDto> getAllUsers(){
+    public List<UserDto> getAllUsers(@RequestParam(required = false) boolean onlyDeleted, Principal principal){
+        if(userService.getUserByEmail(principal.getName()).getRole().equals(Role.ROLE_USER)){
+            return userService
+                    .getAll(false)
+                    .stream()
+                    .collect(ArrayList::new,
+                            (list, user)->list.add(toUserDtoMapper.map(user)),
+                            ArrayList::addAll);
+        }
+
         return userService
-                .loadAllUsers()
+                .getAll(onlyDeleted)
                 .stream()
                 .collect(ArrayList::new,
-                         (list, user)->list.add(toUserDtoMapper.map(user)),
-                         ArrayList::addAll);
+                        (list, user)->list.add(toUserDtoMapper.map(user)),
+                        ArrayList::addAll);
+
     }
 
     @GetMapping("/{id}")

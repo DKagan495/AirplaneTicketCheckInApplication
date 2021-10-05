@@ -69,7 +69,7 @@ public class RegistrationController {
         }
 
         User user = userService.getUserByEmail(email);
-        user.setAccountEnabled(true);
+        user.setEnabled(true);
 
         return new ResponseEntity<>(toUserDtoMapper.map(userService.update(user.getId(), user)), HttpStatus.ACCEPTED);
     }

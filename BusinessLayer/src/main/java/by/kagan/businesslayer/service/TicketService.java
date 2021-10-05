@@ -1,8 +1,10 @@
 package by.kagan.businesslayer.service;
 
+import by.kagan.businesslayer.domain.Flight;
 import by.kagan.businesslayer.domain.Ticket;
 import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.exception.TicketNotFoundException;
+import by.kagan.businesslayer.repository.FlightRepository;
 import by.kagan.businesslayer.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -21,11 +23,21 @@ public class TicketService {
 
     private final UserService userService;
 
+    private final FlightRepository flightRepository;
+
 
 
     @Cacheable(value = "ticket")
     @Transactional
     public Ticket create(String email, Ticket ticket){
+        Flight flight = ticket.getFlight();
+        if(flight.getTicketsLeft() == 0){
+            return null;
+        }
+
+        flight.setTicketsLeft(ticket.getFlight().getTicketsLeft()-1);
+        flightRepository.save(flight);
+
         ticket.setUserId(userService.getUserByEmail(email).getId());
         ticketRepository.save(ticket);
         return ticket;
