@@ -30,12 +30,12 @@ public class TicketService {
     @Cacheable(value = "ticket")
     @Transactional
     public Ticket create(String email, Ticket ticket){
-        Flight flight = ticket.getFlight();
+        Flight flight = flightRepository.getById(ticket.getFlightId());
         if(flight.getTicketsLeft() == 0){
             return null;
         }
 
-        flight.setTicketsLeft(ticket.getFlight().getTicketsLeft()-1);
+        flight.setTicketsLeft(flight.getTicketsLeft()-1);
         flightRepository.save(flight);
 
         ticket.setUserId(userService.getUserByEmail(email).getId());

@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +32,10 @@ public class TicketController {
     private final TicketToTicketResponseMapper toTicketResponseMapper;
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TicketResponse> create(@RequestBody TicketRequest request, Principal principal){
-        Ticket ticket = toTicketMapper.map(request);
-        ticketService.create(principal.getName(), ticket);
+    public ResponseEntity<HttpStatus> create(@RequestBody TicketRequest request, Principal principal) throws URISyntaxException {
+        ticketService.create(principal.getName(), toTicketMapper.map(request));
 
-        return new ResponseEntity<>(toTicketResponseMapper.map(ticket), HttpStatus.CREATED);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @Secured("ROLE_ADMIN")

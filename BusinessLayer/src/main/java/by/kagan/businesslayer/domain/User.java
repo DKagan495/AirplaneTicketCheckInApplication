@@ -23,7 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "\"user\"")
-@SQLDelete(sql = "UPDATE \"user\" SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE \"user\" SET deleted = true, enabled = false WHERE id=?")
 @FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "onlyDeleted", type = "boolean"))
 @Filter(name = "deletedUserFilter", condition = "deleted = :onlyDeleted")
 public class User {

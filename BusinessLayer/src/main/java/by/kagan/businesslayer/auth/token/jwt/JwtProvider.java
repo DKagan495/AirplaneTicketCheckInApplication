@@ -1,6 +1,9 @@
 package by.kagan.businesslayer.auth.token.jwt;
 
+import by.kagan.businesslayer.domain.User;
+import by.kagan.businesslayer.service.UserService;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +18,7 @@ import java.util.Date;
 public class JwtProvider {
 
     private static final String KEY = "sometimes";
+
 
     public String getUsername(String token){
         Claims claims = Jwts.parser()

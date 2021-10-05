@@ -24,13 +24,16 @@ public class JwtFilter extends GenericFilterBean {
     private final AccountAuthorizationService authorizationService;
 
 
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String token = getTokenFromRequest((HttpServletRequest) request);
-        if (token != null && provider.validateToken(token)) {
+        if (token != null && provider.validateToken(token)
+                && authorizationService.loadUserByUsername(provider.getUsername(token)).isEnabled()) {
             String userLogin = provider.getUsername(token);
             Account userDetails = (Account) authorizationService.loadUserByUsername(userLogin);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         chain.doFilter(request, response);

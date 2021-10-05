@@ -5,6 +5,7 @@ import by.kagan.businesslayer.domain.User;
 import by.kagan.businesslayer.exception.UserNotFoundException;
 import by.kagan.businesslayer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.cache.annotation.CacheEvict;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -70,6 +72,7 @@ public class UserService {
     @CachePut(value = "user", key = "#user.email")
     public User update(Long id, User user){
         user.setId(id);
+        log.info("method update is working now");
         userRepository.save(user);
         return user;
     }
@@ -77,6 +80,9 @@ public class UserService {
     @Transactional
     @CacheEvict(value = "user")
     public void delete(Long id){
+        User user = loadUserById(id);
+        user.setEnabled(false);
+        update(id, user);
         userRepository.deleteById(id);
     }
 
