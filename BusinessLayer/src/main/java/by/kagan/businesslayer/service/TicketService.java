@@ -13,7 +13,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -31,6 +30,7 @@ public class TicketService {
     @Transactional
     public Ticket create(String email, Ticket ticket){
         Flight flight = flightRepository.getById(ticket.getFlightId());
+
         if(flight.getTicketsLeft() == 0){
             return null;
         }

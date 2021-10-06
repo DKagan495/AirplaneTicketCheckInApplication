@@ -5,9 +5,12 @@ plugins {
     id 'java'
 }
 
-group = 'by.kagan'
+task prepareKotlinBuildScriptModel {
+}
+
+group = 'by.kagan.businesslayer'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '16'
+sourceCompatibility = '11'
 
 configurations {
     compileOnly {

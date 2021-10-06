@@ -4,9 +4,12 @@ plugins {
     id 'java'
 }
 //TODO: базовые пакеты включают название проекта и/или сервиса напр.: by.kagan.ticket.audit || by.kagan.audit
-group = 'by.kagan'
+group = 'by.kagan.auditlayer'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+task prepareKotlinBuildScriptModel {
+}
 
 configurations {
     compileOnly {
