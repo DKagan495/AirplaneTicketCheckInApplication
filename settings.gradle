@@ -1,3 +1,4 @@
 rootProject.name = 'AirplaneTicketCheckInApplication'
 include 'BusinessLayer'
 include 'AuditLayer'
+include 'message'

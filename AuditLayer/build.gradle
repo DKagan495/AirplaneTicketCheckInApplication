@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 //TODO: базовые пакеты включают название проекта и/или сервиса напр.: by.kagan.ticket.audit || by.kagan.audit
-group = 'by.kagan.auditlayer'
+group = 'by.kagan'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -33,6 +33,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    implementation project(':message')
 }
 
 test {
