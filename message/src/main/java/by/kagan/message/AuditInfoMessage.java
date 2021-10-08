@@ -1,16 +1,19 @@
 package by.kagan.message;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Document
-public class AuditInfoMessage {
+public class AuditInfoMessage implements Serializable {
 
     @Id
     private String email;
@@ -19,5 +22,5 @@ public class AuditInfoMessage {
 
     private LocalDateTime requestTime;
 
-    private String responseCode;
+    private int responseCode;
 }

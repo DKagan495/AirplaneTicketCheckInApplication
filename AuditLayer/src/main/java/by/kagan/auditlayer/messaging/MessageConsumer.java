@@ -4,6 +4,7 @@ import by.kagan.auditlayer.service.MessageService;
 import by.kagan.message.AuditInfoMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import javax.jms.Message;
@@ -16,6 +17,7 @@ public class MessageConsumer implements MessageListener {
     private final MessageService messageService;
 
     @SneakyThrows
+    @JmsListener(destination = "auditlayer")
     @Override
     public void onMessage(Message message) {
         ObjectMessage objectMessage = (ObjectMessage) message;

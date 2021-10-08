@@ -1,6 +1,7 @@
 package by.kagan.businesslayer.config;
 
 import by.kagan.businesslayer.auth.token.jwt.JwtFilter;
+import by.kagan.businesslayer.messaging.MessageFilter;
 import by.kagan.businesslayer.service.AccountAuthorizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String USER_ENDPOINTS = "/api/user/**";
 
     private final JwtFilter jwtFilter;
+    private final MessageFilter messageFilter;
 
     private final AccountAuthorizationService authorizationService;
 
@@ -46,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(USER_ENDPOINTS).authenticated()
                 .antMatchers(FREE_ENDPOINTS_SIGN_UP, FREE_ENDPOINTS_AUTH).permitAll()
                 .and()
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(messageFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
