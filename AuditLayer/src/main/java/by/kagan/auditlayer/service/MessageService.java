@@ -5,6 +5,8 @@ import by.kagan.message.AuditInfoMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MessageService {
@@ -13,6 +15,10 @@ public class MessageService {
     public AuditInfoMessage save(AuditInfoMessage message){
         messageRepository.save(message);
         return message;
+    }
+
+    public List<AuditInfoMessage> getAll(){
+        return messageRepository.findAll();
     }
 
 }

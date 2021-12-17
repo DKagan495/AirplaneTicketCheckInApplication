@@ -42,7 +42,6 @@ public class User {
 
     private Date dateOfBirth;
 
-//    TODO: достаточно просто enabled
     @Column(name = "enabled")
     private boolean enabled;
 

@@ -17,7 +17,7 @@ public class MessageConsumer implements MessageListener {
     private final MessageService messageService;
 
     @SneakyThrows
-    @JmsListener(destination = "auditlayer")
+    @JmsListener(destination = "audit-queue")
     @Override
     public void onMessage(Message message) {
         ObjectMessage objectMessage = (ObjectMessage) message;

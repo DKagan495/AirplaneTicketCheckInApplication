@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
+import java.util.Optional;
 
+@EnableJms
 @Configuration
 @RequiredArgsConstructor
 public class ActiveMQConfig {
@@ -15,18 +19,23 @@ public class ActiveMQConfig {
     @Bean
     public ConnectionFactory connectionFactory(){
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
+
         factory.setBrokerURL("tcp://localhost:61616");
-        factory.setUserName("admin");
-        factory.setPassword("admin");
+        factory.setUserName("daniel");
+        factory.setPassword("16052002");
         factory.setTrustAllPackages(true);
+
         return factory;
     }
 
     @Bean
-    public JmsTemplate jmsTemplate(){
-        JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(connectionFactory());
-        jmsTemplate.setPubSubDomain(true);
-        return jmsTemplate;
+    public DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory(){
+        DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory =
+                new DefaultJmsListenerContainerFactory();
+
+        defaultJmsListenerContainerFactory.setConnectionFactory(connectionFactory());
+        defaultJmsListenerContainerFactory.setPubSubDomain(true);
+
+        return defaultJmsListenerContainerFactory;
     }
 }

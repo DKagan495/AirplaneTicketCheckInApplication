@@ -8,6 +8,7 @@ import by.kagan.businesslayer.mapper.AirportRequestToAirportMapper;
 import by.kagan.businesslayer.mapper.AirportToAirportDtoMapper;
 import by.kagan.businesslayer.service.AirportService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "Airport Information")
+@Api(tags = "Методы для работы с аэропортами.")
 @RequestMapping(value = "/api/user/airports")
 public class AirportController {
     private final AirportService airportService;
@@ -30,12 +31,14 @@ public class AirportController {
     private final AirportToAirportDtoMapper toAirportDtoMapper;
 
     @Secured("ROLE_ADMIN")
+    @ApiOperation("Добавление аэропорта.")
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AirportDto> create(@RequestBody AirportRequest request){
         AirportDto airportDto = toAirportDtoMapper.map(airportService.create(toAirportMapper.map(request)));
         return new ResponseEntity<>(airportDto, HttpStatus.CREATED);
     }
 
+    @ApiOperation("Получение списка всех аэропортов.")
     @GetMapping
     public List<AirportDto> getAll(){
         return airportService
@@ -51,6 +54,7 @@ public class AirportController {
     }
 
     @Secured("ROLE_ADMIN")
+    @ApiOperation("Редактирование информации аэропорта.")
     @PatchMapping(value = "/{id}")
     public ResponseEntity<AirportDto> update(@PathVariable Long id, @RequestBody AirportRequest airportRequest){
         AirportDto airportDto = toAirportDtoMapper.map(airportService.update(id, toAirportMapper.map(airportRequest)));
@@ -58,6 +62,7 @@ public class AirportController {
     }
 
     @Secured("ROLE_ADMIN")
+    @ApiOperation("Удаление аэропорта из списка.")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
         airportService.kick(id);

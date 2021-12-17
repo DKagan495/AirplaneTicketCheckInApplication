@@ -6,6 +6,7 @@ import by.kagan.businesslayer.mapper.FlightRequestToFlightMapper;
 import by.kagan.businesslayer.mapper.FlightToFlightDtoMapper;
 import by.kagan.businesslayer.service.FlightService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@Api(tags = "Flights information")
+@Api(tags = "Методы для работы с полетами.")
 @RequestMapping(value = "/api/user/flights")
 public class FlightController {
     private final FlightService flightService;
@@ -29,6 +30,7 @@ public class FlightController {
 
     private final FlightRequestToFlightMapper toFlightMapper;
 
+    @ApiOperation("Получение списка всех аэропортов")
     @GetMapping
     public List<FlightResponse> getAll(){
         return flightService
@@ -39,11 +41,13 @@ public class FlightController {
                          ArrayList::addAll);
     }
 
+    @ApiOperation("Получение аэропорта по идентификатору.")
     @GetMapping("/{id}")
     public FlightResponse get(@PathVariable Long id){
         return toFlightDtoMapper.map(flightService.getById(id));
     }
 
+    @ApiOperation("Добавление аэропорта.")
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FlightResponse> create(@RequestBody FlightRequest request){
@@ -51,6 +55,7 @@ public class FlightController {
                 .map(flightService.create(toFlightMapper.map(request))), HttpStatus.CREATED);
     }
 
+    @ApiOperation("Редактироание информации аэропорта.")
     @Secured("ROLE_ADMIN")
     @PatchMapping(value = "/{id}")
     public ResponseEntity<FlightResponse> update(@PathVariable Long id, FlightRequest request){
@@ -58,10 +63,12 @@ public class FlightController {
                 .map(flightService.update(id, toFlightMapper.map(request))), HttpStatus.OK);
     }
 
+    @ApiOperation("Удаление аэропорта из списка")
     @Secured("ROLE_ADMIN")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
         flightService.delete(id);
+
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

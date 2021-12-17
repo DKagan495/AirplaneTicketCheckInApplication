@@ -1,12 +1,15 @@
 #TODO: ?????????? yml
 server:
   port: 9999
+
 spring:
   datasource:
     url: mongodb://localhost:27017/auditbase
     username: daniel
     password: 16052002
   activemq:
-    broker-url: tcp://localhost:61616
-    user: admin
-    password: admin
+    broker-url: tcp://127.0.0.1:61616
+    user: daniel
+    password: 16052002
+    packages:
+     trust-all: true
