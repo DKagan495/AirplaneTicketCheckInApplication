@@ -9,7 +9,6 @@ import org.springframework.jms.annotation.EnableJms;
 @SpringBootApplication
 @EnableConfigurationProperties
 @ConfigurationPropertiesScan
-@EnableJms
 public class AuditLayerApplication {
 
     public static void main(String[] args) {

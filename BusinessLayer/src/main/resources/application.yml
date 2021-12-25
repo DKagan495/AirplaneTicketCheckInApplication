@@ -32,3 +32,4 @@ spring:
       pool:
         enabled: true
         max-connections: 50
+      topic: audit-queue

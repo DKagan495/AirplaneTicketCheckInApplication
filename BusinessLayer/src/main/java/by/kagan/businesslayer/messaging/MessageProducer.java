@@ -16,6 +16,7 @@ public class MessageProducer {
     public void send(AuditInfoMessage message){
         log.info("sending...");
         jmsTemplate.convertAndSend("audit-queue", message);
+        log.info(message.getEmail());
     }
 
 }

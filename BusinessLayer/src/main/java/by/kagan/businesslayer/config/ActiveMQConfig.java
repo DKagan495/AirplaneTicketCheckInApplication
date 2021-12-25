@@ -1,5 +1,7 @@
 package by.kagan.businesslayer.config;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Bean;
@@ -9,17 +11,17 @@ import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
 
+@Getter
 @EnableJms
 @Configuration
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ActiveMQConfig {
 
     @Bean
     public ConnectionFactory connectionFactory(){
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
         factory.setBrokerURL("tcp://localhost:61616");
-        factory.setUserName("admin");
-        factory.setPassword("admin");
+
         return factory;
     }
 

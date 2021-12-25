@@ -2,9 +2,11 @@ package by.kagan.businesslayer.config;
 
 import by.kagan.businesslayer.auth.token.jwt.JwtFilter;
 import by.kagan.businesslayer.messaging.MessageFilter;
+import by.kagan.businesslayer.messaging.MessageProducer;
 import by.kagan.businesslayer.service.AccountAuthorizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String USER_ENDPOINTS = "/api/user/**";
 
     private final JwtFilter jwtFilter;
-    private final MessageFilter messageFilter;
+    private final MessageProducer messageProducer;
 
     private final AccountAuthorizationService authorizationService;
 
@@ -35,6 +37,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(authorizationService);
 
+    }
+
+    public FilterRegistrationBean<MessageFilter> filterMessage(){
+        FilterRegistrationBean<MessageFilter> registrationBean = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new MessageFilter(messageProducer));
+        registrationBean.addUrlPatterns(FREE_ENDPOINTS_AUTH, FREE_ENDPOINTS_SIGN_UP, USER_ENDPOINTS);
+
+        return registrationBean;
     }
 
     @Override
@@ -49,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(FREE_ENDPOINTS_SIGN_UP, FREE_ENDPOINTS_AUTH).permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(messageFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(filterMessage().getFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

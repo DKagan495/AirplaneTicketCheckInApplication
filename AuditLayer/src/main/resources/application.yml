@@ -8,8 +8,9 @@ spring:
     username: daniel
     password: 16052002
   activemq:
-    broker-url: tcp://127.0.0.1:61616
-    user: daniel
-    password: 16052002
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
     packages:
      trust-all: true
+    topic: audit-queue

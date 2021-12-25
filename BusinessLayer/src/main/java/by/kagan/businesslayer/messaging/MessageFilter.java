@@ -3,10 +3,8 @@ package by.kagan.businesslayer.messaging;
 import by.kagan.businesslayer.auth.token.model.Account;
 import by.kagan.message.AuditInfoMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-@Component
 @RequiredArgsConstructor
 public class MessageFilter extends GenericFilterBean {
 
